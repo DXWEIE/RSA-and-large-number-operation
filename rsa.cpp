@@ -1,5 +1,5 @@
 
-#include "D:/homework and study/密码学/第六次作业/bignum.h"
+#include "D:/homework and study/密码学/第六次作业/第六次作业-董小威-2016301500135/bignum.h"
 using namespace std;
 
 
@@ -1068,8 +1068,8 @@ int div_b(BN a, BN b, BN q, BN rem)
 	return FLAG_OK;
 }
 
-//产生bits个二进制位的大数result
-int genBN(BN result, int bits)
+//产生bits个二进制位的大数result，每32位哈希一次，很慢
+int genBN_t(BN result, int bits)
 {
 	if (bits < 0 || bits>BNMAXBIT)//无法产生更大位数的
 		return FLAG_ERROR;
@@ -1136,6 +1136,92 @@ int genBN(BN result, int bits)
 	return FLAG_OK;
 }
 
+//产生bits个二进制位的大数result，每5个32位哈希一次，快了不止一点
+int genBN(BN result, int bits)
+{
+
+	if (bits < 0 || bits>BNMAXBIT)//无法产生更大位数的
+		return FLAG_ERROR;
+	if (bits == 0)
+	{
+		SETZERO_B(result);
+		return FLAG_OK;
+	}
+	//其它情况正常处理
+
+	char randpath[11] = "rand.txt";
+	char digest[80];
+	char onebit[9] = { 0 };
+	int times = (bits + 31) / 32;
+	int t5 = ((times+4) / 5)-1;//一次取出5个的情况有多少次
+	int t5r = times % 5;//不足5位的
+	if (t5r >= 1) t5r--;//留下最后一次
+
+	//cout << "times= "<<times << endl;
+	int remain = bits % 32;//最高一位没动
+	BN a = { 0 }, temp = { 0 };
+	SETDIGITS_B(a, times);
+	uint32_t perdig = 0;
+	int i = 0,j = 0;
+	for (; i < t5; i++)//最高32位先不动
+	{
+		writerand(randpath);
+		memset(digest, 0, sizeof(digest));
+		mysha1(randpath, digest);//有40个字节，160位数		
+		for (j = 0; j < 5; j++)
+		{
+			memcpy(onebit, &digest[8*j], 8);
+			perdig = stoul(onebit, NULL, 16);
+			a[5*i + j +1] = perdig;
+		}	
+	}
+	j = 0;
+	writerand(randpath);
+	memset(digest, 0, sizeof(digest));
+	mysha1(randpath, digest);//有40个字节，160位数
+	for (; j < t5r; j++)//不足5位的
+	{	
+		memcpy(onebit, &digest[8 * j], 8);
+		perdig = stoul(onebit, NULL, 16);
+		a[5 * i + j + 1] = perdig;
+	}
+
+	int shiftright = 0;
+	uint32_t bit32 = 0x80000000U;
+	if (remain == 0)//是32倍数，要凑出32位！
+	{
+		while (true)
+		{
+			writerand(randpath);
+			memset(digest, 0, sizeof(digest));
+			mysha1(randpath, digest);//有40个字节，160位数
+			memcpy(onebit, digest, 8);
+			perdig = stoul(onebit, NULL, 16);
+			if (perdig >= bit32)//要凑够
+				break;
+		}
+	}
+	else
+	{
+		writerand(randpath);
+		memset(digest, 0, sizeof(digest));
+		mysha1(randpath, digest);//有40个字节，160位数
+		memcpy(onebit, digest, 8);
+		perdig = stoul(onebit, NULL, 16);
+
+		SETONEBIT_B(temp, perdig);
+		shiftright = getbits_b(temp) - remain;
+		//cout << "shiftright = " << shiftright << endl;
+		if (shiftright >= 0)//等于不用移动，还要左移
+			perdig = perdig >> shiftright;
+		else if (shiftright < 0)
+			perdig = perdig << abs(shiftright);
+	}
+	a[5*i +j + 1] = perdig;
+	cpy_b(result, a);
+	RMLDZRS_B(result);
+	return FLAG_OK;
+}
 //把随机数写到addr中
 void writerand(char * addr)
 {
@@ -1618,12 +1704,12 @@ int findprime(BN a, int bits)//寻找一个bits位的素数
 	};
 	BN temp1 = { 1,1 }, temp2, temp3;
 	int judge[30] = { 0 };
-	SETONEBIT_B(temp3, prime[19]);//最大考虑范围
+	SETONEBIT_B(temp3, prime[34]);//最大考虑范围，对于524比特，34比较好（也就是第35个）
 	
 	BN bignum, fac,gcd,linshi,adjnum,linshi1;
 	SETONEBIT_B(linshi, 2U);
 	int fermatresult=0;
-	readbn(fac, "20primefac.txt");//前30个素数的乘积
+	readbn(fac, "35primefac.txt");//前35个素数的乘积，对于524比特比较好
 	int times = 0;
 
 //redo:
@@ -1655,7 +1741,7 @@ int findprime(BN a, int bits)//寻找一个bits位的素数
 		else if(cmp_b(gcd, TWO_BN) != 0)//调整,前提不是偶数才调整
 		{
 			SETONEBIT_B(linshi, 2U);
-			for (int i = 0; i < 17; i++)
+			for (int i = 0; i < 30; i++)//对于524比特，30比较好
 			{
 				add_b(bignum, linshi, adjnum);
 				//cpy_b(bignum, adjnum);
@@ -1749,6 +1835,22 @@ int main()
 	memset(cry, 0, BNSIZE);
 	memset(dec, 0, BNSIZE);
 	
+	int debug = 0;
+	cout << "debug or not? 1 or 0" << endl;
+	cin >> debug;
+	if (debug == 1)
+	{
+		int bits=0;
+		cout << "how many bits prime do you want?" << endl;
+		cin >> bits;
+		int realtime1 = clock();
+		findprime(p, bits);
+		printf("\nfind a %d bits prime process costs %d ms \n\n", getbits_b(p), clock() - realtime1);
+		cout << "prime p=  " << bn2str(p) << endl;
+		cout << "bits of p is    " << getbits_b(p) << endl << endl;
+		system("pause");
+		return 0;
+	}
 	//产生p和q，一般情况下是有了的不用自己产生
 	char p_path[81] = "myp4.txt";
 	char q_path[81] = "myq4.txt";
@@ -1807,7 +1909,7 @@ int main()
 	if (ifgen == 1)//为1则产生
 	{
         genpq(p_path, q_path);
-		SETONEBIT_B(e, 10001U);
+		SETONEBIT_B(e, 10001u);
 		writebn(e_path, e);
 		readbn(p, p_path);
 		readbn(q, q_path);
@@ -1832,10 +1934,10 @@ int main()
 	cout << "n is  " << bn2str(n) << endl;
 	writebn("n.txt", eula);
 
-	subuint_b(p, 1U, p_1);
+	subuint_b(p, 1u, p_1);
 	cout << "p-1 is  " << bn2str(p_1) << endl;
 
-	subuint_b(q, 1U, q_1);
+	subuint_b(q, 1u, q_1);
 	cout << "q-1 is  " << bn2str(q_1) << endl;
 
 	mul(p_1, q_1, eula);
@@ -1843,7 +1945,6 @@ int main()
 	writebn("fn.txt", eula);
 	
 	//一般公钥e =65537
-	//SETONEBIT_B(e, 10001U);
 
 	gcd_b(e, eula, temp3);
 	if (cmp_b(temp3, ONE_BN) != 0) {
