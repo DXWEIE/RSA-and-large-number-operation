@@ -22,3 +22,5 @@ may cause some problem because of it contains Chinese charactars. If so, try to 
 -
 因为有中文，会有编码问题，可能需要用notepad++转为UTF-8或者ANSI中的某一种
 -
+if you encounter problem below, add _SCL_SECURE_NO_WARNINGS to your compiler preprocessor definition :
+C4996	'std::basic_string<char,std::char_traits<char>,std::allocator<char>>::copy': Call to 'std::basic_string::copy' with parameters that may be unsafe - this call relies on the caller to check that the passed values are correct. To disable this warning, use -D_SCL_SECURE_NO_WARNINGS. See documentation on how to use Visual C++ 'Checked Iterators'	2018tst	d:\密码学\my特别快的rsa and bn\rsa2.cpp	465
