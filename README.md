@@ -11,8 +11,11 @@ RSA and large numer operation library write in c/c++
 4.If you want to test rsa.cpp,you need a file called 'plain.txt' in your current filefolder. And to avoid errors, the content of plain.txt is suggested to be a SHA-1 result of another file.<br>
 
 P.S. 1
-产生大素数慢在了产生大随机数上，因为mysha1()调用了writerand()，使用了读写文件，而且每次哈希只产生32个二进制位，太慢了！后续可以优化
+rsa2.cpp use the way Knuth provided in his book to implement division. Hence the efficiency enhance rapidly.
 -
+rsa2.cpp使用了Knuth方法实现了除法，效率大幅提高。
+-
+
 
 P.S. 2
 may cause some problem because of it contains Chinese charactars. If so, try to convert the code to UTF-8 or ANSI.
