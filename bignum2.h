@@ -6,69 +6,69 @@
 #include <string>
 #include <fstream>
 using namespace std;
-#define BITPERDIGIT 32//Ã¿¸öĞ¡¿éÊÇuint32£¬32Î»Ë³ĞòºÍÈËÆÚÍûÊÇÒ»ÖÂµÄ£¬µ±ºÚºĞ¾ÍºÃ
-#define BASE 0x100000000U//Ã¿¸öĞ¡¿éuint32£¬»ùÊı¾ÍÊÇ2^32,¿ÉÒÔÔÚÄ£µÄÊ±ºòÓÃÉÏ
-#define BNMAXDGT 32//×î¶à32¡°Î»¡±¸ö32Î»
+#define BITPERDIGIT 32//æ¯ä¸ªå°å—æ˜¯uint32ï¼Œ32ä½é¡ºåºå’ŒäººæœŸæœ›æ˜¯ä¸€è‡´çš„ï¼Œå½“é»‘ç›’å°±å¥½
+#define BASE 0x100000000U//æ¯ä¸ªå°å—uint32ï¼ŒåŸºæ•°å°±æ˜¯2^32,å¯ä»¥åœ¨æ¨¡çš„æ—¶å€™ç”¨ä¸Š
+#define BNMAXDGT 32//æœ€å¤š32â€œä½â€ä¸ª32ä½
 #define ALLONE 0xffffffffU
 #define ALLONEL 0xffffffffUL
-typedef uint32_t BN[BNMAXDGT + 1];//BNÊÇ1024+32Î»µÄ
-#define BNMAXBIT BNMAXDGT<<5 //BN×î´óÄÜ´¦Àí1024Î»
-#define BNDMAXBIT BNMAXBIT<<1 //BND×î´óÄÜ´¦Àí2048Î»
+typedef uint32_t BN[BNMAXDGT + 1];//BNæ˜¯1024+32ä½çš„
+#define BNMAXBIT BNMAXDGT<<5 //BNæœ€å¤§èƒ½å¤„ç†1024ä½
+#define BNDMAXBIT BNMAXBIT<<1 //BNDæœ€å¤§èƒ½å¤„ç†2048ä½
 #define BASEDIV2  0x80000000U
-typedef uint32_t BND[1 + (BNMAXDGT << 1)];//BNDÄÜ´¦Àí2048Î»£¬³¤¶ÈÊÇ2048+32
-#define BNSIZE sizeof(BN)//BNÕ¼ÓÃµÄ×Ö½ÚÊı
+typedef uint32_t BND[1 + (BNMAXDGT << 1)];//BNDèƒ½å¤„ç†2048ä½ï¼Œé•¿åº¦æ˜¯2048+32
+#define BNSIZE sizeof(BN)//BNå ç”¨çš„å­—èŠ‚æ•°
 
-//Ò»Ğ©³£Á¿
+//ä¸€äº›å¸¸é‡
 BN ZERO_BN = { 0 };//0
 BN ONE_BN = { 1,1 };//1
-BN TWO_BN = { 1,2 }; //2,¿´ÉÏÈ¥µÚÒ»Î»¾ÍÊÇ³¤¶ÈÎª£¬¸³ÖµµÄÊ±ºòÊÇ[0]£¬uint32ÄÚµÄË³Ğò¾Í²»ÓÃ¹ÜÁË
+BN TWO_BN = { 1,2 }; //2,çœ‹ä¸Šå»ç¬¬ä¸€ä½å°±æ˜¯é•¿åº¦ä¸ºï¼Œèµ‹å€¼çš„æ—¶å€™æ˜¯[0]ï¼Œuint32å†…çš„é¡ºåºå°±ä¸ç”¨ç®¡äº†
 
-//flag×´Ì¬¡£¡£¡£ºóÀ´Ã»ÓĞÓÃµ½
-#define FLAG_OK 0 //Ã»ÓĞÒç³ö°¡ÕâĞ©µÄ£¬Õı³£
-#define FLAG_OF 1 //¼Ó·¨ÉÏÒçÁË£¬×îºóÒ»´Î[31]+[31]³öÏÖÁË½øÎ»£¬×Ô¶¯Ä£³ı²»ÓÃ¹Ü
-#define FLAG_UF 2//¿ÉÄÜÊÇ¼õ·¨ÏÂÒçÁË
-#define FLAG_DIVZERO 3//³ı0´íÎó
-#define FLAG_FILE_ERROR 4//¶ÁĞ´ÎÄ¼ş´íÎó
-#define FLAG_NOINV 5//²»»¥ËØÃ»ÓĞÄæÔª
-#define FLAG_ERROR 6//³ö´íÁË
+//flagçŠ¶æ€ã€‚ã€‚ã€‚åæ¥æ²¡æœ‰ç”¨åˆ°
+#define FLAG_OK 0 //æ²¡æœ‰æº¢å‡ºå•Šè¿™äº›çš„ï¼Œæ­£å¸¸
+#define FLAG_OF 1 //åŠ æ³•ä¸Šæº¢äº†ï¼Œæœ€åä¸€æ¬¡[31]+[31]å‡ºç°äº†è¿›ä½ï¼Œè‡ªåŠ¨æ¨¡é™¤ä¸ç”¨ç®¡
+#define FLAG_UF 2//å¯èƒ½æ˜¯å‡æ³•ä¸‹æº¢äº†
+#define FLAG_DIVZERO 3//é™¤0é”™è¯¯
+#define FLAG_FILE_ERROR 4//è¯»å†™æ–‡ä»¶é”™è¯¯
+#define FLAG_NOINV 5//ä¸äº’ç´ æ²¡æœ‰é€†å…ƒ
+#define FLAG_ERROR 6//å‡ºé”™äº†
 
-//ĞèÒªÊ¹ÓÃµÄÒ»Ğ©ºêº¯Êı
+//éœ€è¦ä½¿ç”¨çš„ä¸€äº›å®å‡½æ•°
 
-//±È½Ï´óĞ¡
+//æ¯”è¾ƒå¤§å°
 #define MIN(a,b) ((a)<(b)?(a):(b))
 
-//»ñµÃÎ»Êı,[0]ÀïÃæ´æµÄÊÇuint32¸ñÊ½µÄÎ»Êı
+//è·å¾—ä½æ•°,[0]é‡Œé¢å­˜çš„æ˜¯uint32æ ¼å¼çš„ä½æ•°
 #define DIGITS_B(n_b) ((uint32_t)*(n_b))
 
-//ÉèÖÃÎ»Êı£¬ÖÃ[0]ÎªÏëÒªµÄÎ»Êı
+//è®¾ç½®ä½æ•°ï¼Œç½®[0]ä¸ºæƒ³è¦çš„ä½æ•°
 #define SETDIGITS_B(n_b, b)  (*(n_b) = (uint32_t)(b))
 
 
-//Ö¸Ïò×î¸ßÎ»,ÓÃÖ¸Õë¼Ó·¨
+//æŒ‡å‘æœ€é«˜ä½,ç”¨æŒ‡é’ˆåŠ æ³•
 #define MSDPTR_B(n_b)  ((n_b) + DIGITS_B (n_b))
 
 
-//Ö¸Ïò×îµÍÎ»,[0]ÊÇÎ»Êı£¬[1]²ÅÊÇÊı×Ö
+//æŒ‡å‘æœ€ä½ä½,[0]æ˜¯ä½æ•°ï¼Œ[1]æ‰æ˜¯æ•°å­—
 #define LSDPTR_B(n_b)    ((n_b)+1)
 
-//ÖÃÎªÈ«0£¬Î»ÊıÖÃÎª0¾Í¿ÉÒÔÁË£¬0Î»£¬ÒÔºó¿ÉÒÔ¸²¸Ç
+//ç½®ä¸ºå…¨0ï¼Œä½æ•°ç½®ä¸º0å°±å¯ä»¥äº†ï¼Œ0ä½ï¼Œä»¥åå¯ä»¥è¦†ç›–
 #define SETZERO_B(n_b)    (*(n_b) = 0)
 
-//ĞèÒªÊ¹ÓÃµÄÒ»Ğ©º¯Êı
-//Ôö¼Ó1Î»Î»Êı
+//éœ€è¦ä½¿ç”¨çš„ä¸€äº›å‡½æ•°
+//å¢åŠ 1ä½ä½æ•°
 inline void INCDIGITS_B(BN n_b)
 {
 	*(n_b) = *(n_b)+1;
 }
 
-//¼õÉÙ1Î»Î»Êı
+//å‡å°‘1ä½ä½æ•°
 inline void DECDIGITS_B(BN n_b)
 {
 	if (DIGITS_B(n_b) > 0)
 		*(n_b) = *(n_b)-1;
 }
 
-//ÏÈÊÇ32¡°Î»¡±µÄ,Ïû³ıÇ°µ¼0£¬Ö»ÒªÓĞ32Îª»ùÊıµÄÎ»Êı£¬ÇÒÄÇÒ»Î»Îª0£¬¾ÍÎ»Êı¼õÈ¥1Î»£¬»ñµÃÊµ¼Ê¡°Î»¡±Êı
+//å…ˆæ˜¯32â€œä½â€çš„,æ¶ˆé™¤å‰å¯¼0ï¼Œåªè¦æœ‰32ä¸ºåŸºæ•°çš„ä½æ•°ï¼Œä¸”é‚£ä¸€ä½ä¸º0ï¼Œå°±ä½æ•°å‡å»1ä½ï¼Œè·å¾—å®é™…â€œä½â€æ•°
 inline void RMLDZRS_B(BN n_b)
 {
 	while ((*MSDPTR_B(n_b) == 0) && (DIGITS_B(n_b) > 0))
@@ -77,7 +77,7 @@ inline void RMLDZRS_B(BN n_b)
 	}
 }
 
-//ÉèÖÃÒ»¸öuint32ÊıÎª´óÊı£¬Ö»Õ¼1¡°Î»¡±
+//è®¾ç½®ä¸€ä¸ªuint32æ•°ä¸ºå¤§æ•°ï¼Œåªå 1â€œä½â€
 inline void SETONEBIT_B(BN num, uint32_t u)
 {
 	*LSDPTR_B(num) = u;
@@ -85,26 +85,26 @@ inline void SETONEBIT_B(BN num, uint32_t u)
 	RMLDZRS_B(num);
 }
 
-//¿½±´srcµ½destÖĞ£¬¿ÉÒÔ¸´ÖÆBND£¬Óë½á¹¹ÎŞ¹Ø
+//æ‹·è´srcåˆ°destä¸­ï¼Œå¯ä»¥å¤åˆ¶BNDï¼Œä¸ç»“æ„æ— å…³
 inline void cpy_b(BN dest, BN src)
 {
-	uint32_t * high = MSDPTR_B(src);//×î¸ßÎ»
+	uint32_t * high = MSDPTR_B(src);//æœ€é«˜ä½
 	uint32_t * current;
 	uint32_t bits = DIGITS_B(src);
 
-	while (*high == 0U && bits > 0U)//Ìø¹ıÇ°µ¼0
+	while (*high == 0U && bits > 0U)//è·³è¿‡å‰å¯¼0
 	{
 		high--;
 		bits--;
 	}
 
-	if (bits == 0U)//Î»ÊıÎª0¾Í·µ»Ø0
+	if (bits == 0U)//ä½æ•°ä¸º0å°±è¿”å›0
 	{
 		SETZERO_B(dest);
 		return;
 	}
-	current = dest + bits;//´Ó¶ÔÓ¦¸ßÎ»¿ªÊ¼¸´ÖÆ
-	while (high > src)//»¹ÓĞÎ»Êı
+	current = dest + bits;//ä»å¯¹åº”é«˜ä½å¼€å§‹å¤åˆ¶
+	while (high > src)//è¿˜æœ‰ä½æ•°
 	{
 		*current = *high;
 		high--;
@@ -113,131 +113,134 @@ inline void cpy_b(BN dest, BN src)
 	SETDIGITS_B(dest, bits);
 }
 
-//±È½Ï´óĞ¡Á½¸ö´óÊı´óĞ¡£¬ÏàµÈ·µ»Ø0£¬´óÓÚ·µ»Ø1£¬Ğ¡ÓÚ·µ»Ø-1
+//æ¯”è¾ƒå¤§å°ä¸¤ä¸ªå¤§æ•°å¤§å°ï¼Œç›¸ç­‰è¿”å›0ï¼Œå¤§äºè¿”å›1ï¼Œå°äºè¿”å›-1
 inline int cmp_b(BN a, BN b)
 {
 	uint32_t *msdptra_l, *msdptrb_l;
 	int la = (int)DIGITS_B(a);
 	int lb = (int)DIGITS_B(b);
 
-	if (la == 0 && lb == 0)//Î»Êı¶¼ÊÇ0£¬ÏàµÈ
+	if (la == 0 && lb == 0)//ä½æ•°éƒ½æ˜¯0ï¼Œç›¸ç­‰
 	{
 		return 0;
 	}
 
-	while (a[la] == 0 && la > 0)//Ïû³ıa_lÇ°µ¼Î»µÄ0
+	while (a[la] == 0 && la > 0)//æ¶ˆé™¤a_lå‰å¯¼ä½çš„0
 	{
 		--la;
 	}
 
-	while (b[lb] == 0 && lb > 0)//Ïû³ıb_lÇ°µ¼Î»µÄ0
+	while (b[lb] == 0 && lb > 0)//æ¶ˆé™¤b_lå‰å¯¼ä½çš„0
 	{
 		--lb;
 	}
 
-	if (la == 0 && lb == 0)//Ïû³ıÇ°µ¼Î»µÄ0ÒÔºó¶¼ÊÇ0
+	if (la == 0 && lb == 0)//æ¶ˆé™¤å‰å¯¼ä½çš„0ä»¥åéƒ½æ˜¯0
 	{
 		return 0;
 	}
 
-	if (la > lb)//aµÄÎ»Êı±Èb´ó
+	if (la > lb)//açš„ä½æ•°æ¯”bå¤§
 	{
 		return 1;
 	}
 
-	if (la < lb)//aµÄÎ»Êı±ÈbĞ¡
+	if (la < lb)//açš„ä½æ•°æ¯”bå°
 	{
 		return -1;
 	}
-	//Î»ÊıÒ»ÑùÊ±
-	msdptra_l = a + la;//Ö¸ÏòÓĞĞ§×î¸ßÎ»
-	msdptrb_l = b + lb;//Ö¸ÏòÓĞĞ§×î¸ßÎ»
+	//ä½æ•°ä¸€æ ·æ—¶
+	msdptra_l = a + la;//æŒ‡å‘æœ‰æ•ˆæœ€é«˜ä½
+	msdptrb_l = b + lb;//æŒ‡å‘æœ‰æ•ˆæœ€é«˜ä½
 
-	while ((*msdptra_l == *msdptrb_l) && (msdptra_l > a))//Ò»Î»Î»±È½Ï£¬Èç¹û¸ÃÎ»Êı×ÖÒ»ÑùÏÂÒ»Î»
+	while ((*msdptra_l == *msdptrb_l) && (msdptra_l > a))//ä¸€ä½ä½æ¯”è¾ƒï¼Œå¦‚æœè¯¥ä½æ•°å­—ä¸€æ ·ä¸‹ä¸€ä½
 	{
 		msdptra_l--;
 		msdptrb_l--;
 	}
 
-	if (msdptra_l == a)//µ½Ä©Î»¶¼ÏàÍ¬
+	if (msdptra_l == a)//åˆ°æœ«ä½éƒ½ç›¸åŒ
 	{
 		return 0;
 	}
 
-	if (*msdptra_l > *msdptrb_l)//Ã»µ½Ä©Î»£¬´ËÊ±±È½Ï³öÁËa>b
+	if (*msdptra_l > *msdptrb_l)//æ²¡åˆ°æœ«ä½ï¼Œæ­¤æ—¶æ¯”è¾ƒå‡ºäº†a>b
 	{
 		return 1;
 	}
-	else//Ã»µ½Ä©Î»£¬´ËÊ±±È½Ï³öÁËa<b
+	else//æ²¡åˆ°æœ«ä½ï¼Œæ­¤æ—¶æ¯”è¾ƒå‡ºäº†a<b
 	{
 		return -1;
 	}
 }
 
-//ÉèÖÃÃ¿Ò»Î»Îª0xffffffÀ´ÊµÏÖĞ¡¼õ´óÈ¡Ä£
+//è®¾ç½®æ¯ä¸€ä½ä¸º0xffffffæ¥å®ç°å°å‡å¤§å–æ¨¡
 inline void setmax_b(BN  a)
 {
 	uint32_t  *aptr = a;
-	uint32_t *maptr = a + BNMAXDGT;//Ö¸Ïò×î¸ß[31]
+	uint32_t *maptr = a + BNMAXDGT;//æŒ‡å‘æœ€é«˜[31]
 
-	while (++aptr <= maptr)//È«²¿Îª0xffffffffÈ«1
+	while (++aptr <= maptr)//å…¨éƒ¨ä¸º0xffffffffå…¨1
 	{
-		*aptr = ALLONE;//È«1×î´ó
+		*aptr = ALLONE;//å…¨1æœ€å¤§
 	}
-	SETDIGITS_B(a, BNMAXDGT);//32¡°Î»¡±È«1
+	SETDIGITS_B(a, BNMAXDGT);//32â€œä½â€å…¨1
 }
 
-//¼Ó·¨
-int add_b(BN a, BN b, BN sum);//a+b=sum£¬»áÄ£µô1024Î»
-void add(BN a, BN b, BN sum);//addµÄÁíÒ»¸öĞÎÊ½£¬Çø±ğÊÇsum¿ÉÄÜ±ÈÔ¤ÁÏµÄ¶àÒ»Î»£¬ÔÚÇóÄ£¼ÓµÄÊ±ºòÓÃµÃµ½,Ã»ÓĞÄ£1024Î»
-int adduint_b(BN a, uint32_t b, BN sum);//a¼ÓÒ»¸öuint32ĞÎÊ½µÄb,a+b=sum
+//åŠ æ³•
+int add_b(BN a, BN b, BN sum);//a+b=sumï¼Œä¼šæ¨¡æ‰1024ä½
+void add(BN a, BN b, BN sum);//addçš„å¦ä¸€ä¸ªå½¢å¼ï¼ŒåŒºåˆ«æ˜¯sumå¯èƒ½æ¯”é¢„æ–™çš„å¤šä¸€ä½ï¼Œåœ¨æ±‚æ¨¡åŠ çš„æ—¶å€™ç”¨å¾—åˆ°,æ²¡æœ‰æ¨¡1024ä½
+int adduint_b(BN a, uint32_t b, BN sum);//aåŠ ä¸€ä¸ªuint32å½¢å¼çš„b,a+b=sum
 int adduint_b(uint32_t a, BN b, BN &sum);
 
-//¼õ·¨
+//å‡æ³•
 int sub_b(BN a, BN b, BN result);//result=a-b
-int subuint_b(BN a, uint32_t b, BN &result);//¼õÒ»¸öuint32
-void sub(BN a, BN b, BN result);//Ã»ÓĞÄ£1024Î»µÄ¼õ·¨£¬»áÓÃµÄµ½
+int subuint_b(BN a, uint32_t b, BN &result);//å‡ä¸€ä¸ªuint32
+void sub(BN a, BN b, BN result);//æ²¡æœ‰æ¨¡1024ä½çš„å‡æ³•ï¼Œä¼šç”¨çš„åˆ°
 
 
-//³Ë·¨
-int mul_b(BN a, BN b, BN &result);//result = a*b ÁôÏÂ1024Î»
-int mul(BN a, BN b, BN result);//Ã»ÓĞÄ£2^32^32µÄ³Ë·¨
+//ä¹˜æ³•
+int mul_b(BN a, BN b, BN &result);//result = a*b ç•™ä¸‹1024ä½
+int mul(BN a, BN b, BN result);//æ²¡æœ‰æ¨¡2^32^32çš„ä¹˜æ³•
 
-//³ı·¨
+//é™¤æ³•
 
-int mydiv_b(BN a, BN b, BN q, BN rem);//¿É¿¿µÄÒÆÎ»³ı·¨,ËäÈ»²»¿ì
-int div_b(BN a, BN b, BN q, BN rem);//a=qb+rem£¬ÉÌÊÇq£¬ÓàÊıÊÇrem£¬a¿ÉÒÔÊÇBND£¬Ó¦¸¶Ä£ÃİÔËËã£¬Ê¹ÓÃknuth·½·¨
-int remdiv_b(BN a, BN b, BN & rem);//È¡ÓàÊı³ı·¨£¬a/bµÄÓàÊıÊÇrem
+int mydiv_b(BN a, BN b, BN q, BN rem);//å¯é çš„ç§»ä½é™¤æ³•,è™½ç„¶ä¸å¿«
+int div_b(BN a, BN b, BN q, BN rem);//a=qb+remï¼Œå•†æ˜¯qï¼Œä½™æ•°æ˜¯remï¼Œaå¯ä»¥æ˜¯BNDï¼Œåº”ä»˜æ¨¡å¹‚è¿ç®—ï¼Œä½¿ç”¨knuthæ–¹æ³•
+int remdiv_b(BN a, BN b, BN & rem);//å–ä½™æ•°é™¤æ³•ï¼Œa/bçš„ä½™æ•°æ˜¯rem
 
 
-//È¡Ä£
+//å–æ¨¡
 int modn_b(BN a, BN n, BN & rem);//rem=a mod n
 int modadd_b(BN a, BN b, BN n, BN & result);//result=a+b(mod n)
 void modsub_b(BN a, BN b, BN n, BN &result);//result = a - b(mod n)
-void modmul(BN a, BN b, BN n, BN & result);//Ä£³Ë£¬result=a*b (mod n )
+void modmul(BN a, BN b, BN n, BN & result);//æ¨¡ä¹˜ï¼Œresult=a*b (mod n )
 
-//ĞÅ°²ÊıÑ§ÖĞµÄº¯Êı
-int gcd_b(BN a, BN b, BN & result);//Çó¹«Òò×Ó£¬result=(a,b)
-int inv_b(BN a, BN n, BN & x);//Èç¹û(a,n)=1,ÔòÓĞax = 1 (mod n)£»·ñÔòÒì³£Ã»ÓĞÄæÔª£¬·µ»Ø0£¬ÏÔÈ»ÄæÔª²»¿ÉÄÜÎª0  
-int modexp_b(BN b, BN n, BN m, BN & result);//Ä£ÃİÔËËã£¬ÓÃµÄÄ£Æ½·½,result= b^n (mod m)
-int fermat_b(BN a);//ÓÃ·ÑÂíĞ¡¶¨Àí¼ì²âaÊÇ²»ÊÇËØÊı£¬Ñ¡µÄÊÇ2/3/5/7£¬200Î»µÄa»á³öÏÖÎó±¨£¬500Î»»¹Ã»ÓĞ·¢ÏÖÎó±¨
-void crt_b(BN a, BN b, BN p, BN q, BN & result);//ÓÃÖĞ¹úÊ£Óà¶¨ÀíÇóÄ£Ãİ£¬a^b mod(p*q)
+//ä¿¡å®‰æ•°å­¦ä¸­çš„å‡½æ•°
+int gcd_b(BN a, BN b, BN & result);//æ±‚å…¬å› å­ï¼Œresult=(a,b)
+int inv_b(BN a, BN n, BN & x);//å¦‚æœ(a,n)=1,åˆ™æœ‰ax = 1 (mod n)ï¼›å¦åˆ™å¼‚å¸¸æ²¡æœ‰é€†å…ƒï¼Œè¿”å›0ï¼Œæ˜¾ç„¶é€†å…ƒä¸å¯èƒ½ä¸º0  
+//å¦ä¸€ä¸ªå°½é‡ç”¨ç§»ä½å’ŒåŠ å‡æ³•å®ç°çš„æ±‚é€†æ–¹æ³•
+//å¦‚æœ(a,n)=1,åˆ™æœ‰ax = 1 (mod n)ï¼›å¦åˆ™å¼‚å¸¸æ²¡æœ‰é€†å…ƒï¼Œè¿”å›0ï¼Œæ˜¾ç„¶é€†å…ƒä¸å¯èƒ½ä¸º0  
+int new_inv(BN a, BN n, BN & x);
+int modexp_b(BN b, BN n, BN m, BN & result);//æ¨¡å¹‚è¿ç®—ï¼Œç”¨çš„æ¨¡å¹³æ–¹,result= b^n (mod m)
+int fermat_b(BN a);//ç”¨è´¹é©¬å°å®šç†æ£€æµ‹aæ˜¯ä¸æ˜¯ç´ æ•°ï¼Œé€‰çš„æ˜¯2/3/5/7ï¼Œ200ä½çš„aä¼šå‡ºç°è¯¯æŠ¥ï¼Œ500ä½è¿˜æ²¡æœ‰å‘ç°è¯¯æŠ¥
+void crt_b(BN a, BN b, BN p, BN q, BN & result);//ç”¨ä¸­å›½å‰©ä½™å®šç†æ±‚æ¨¡å¹‚ï¼Œa^b mod(p*q)
 
-//Î»ÔËËãº¯Êı
-int shl_b(BN a);//×óÒÆÒ»Î»
-int shr_b(BN a);//ÓÒÒÆÒ»Î»
-uint32_t getbits_b(BN a);//»ñÈ¡aµÄ¶ş½øÖÆÎ»Êı£¬a¿ÉÒÔÊÇBNDĞÎÊ½,×î´ó2048
+//ä½è¿ç®—å‡½æ•°
+int shl_b(BN a);//å·¦ç§»ä¸€ä½
+int shr_b(BN a);//å³ç§»ä¸€ä½
+uint32_t getbits_b(BN a);//è·å–açš„äºŒè¿›åˆ¶ä½æ•°ï¼Œaå¯ä»¥æ˜¯BNDå½¢å¼,æœ€å¤§2048
 
 
-//ÌØÊâ²Ù×÷µÄº¯Êı
-void exclu();//ÇóÇ°¼¸Ê®¸öËØÊıµÄ³Ë»ı£¬´æÔÚÎÄ¼şÖĞ£¬±ãÓÚºóÃæÕÒËØÊıµÄÊ±ºòÀûÓÃ³Ë»ıÇógcd£¬¶àÇógcd£¬ÉÙ½øĞĞ·ÑÂí¼ì²â
-int genBN_t(BN result, int bits);//²úÉúbits¸ö¶ş½øÖÆÎ»µÄ´óÊıresult£¬Ã¿32Î»¹şÏ£Ò»´Î£¬ºÜÂı
-int genBN(BN result, int bits);//ÀûÓÃsha-1½á¹û²úÉúbits¸ö¶ş½øÖÆÎ»µÄ´óÊıresult,Ã¿5¸ö32Î»¹şÏ£Ò»´Î£¬¿ìÁËÒ»µãµã
-void writerand(char * addr);//°ÑËæ»úÊıĞ´µ½addrÖĞ£¬ºóÃæ¶ÔËüÇó¹şÏ£
-int findprime(BN a, int bits);//Ñ°ÕÒbitsÎ»ËØÊıa£¬»áµ÷ÓÃgenBN²úÉúÒ»¸ö´óÊı£¬È»ºóÀûÓÃexclu()½á¹û½øĞĞµ÷Õû²ÅÈ¥·ÑÂí
-void genpq(char * p_path, char * q_path);//²úÉúË½Ô¿pºÍq´æÔÚp_pathºÍq_pathÎÄ¼şÖĞ
+//ç‰¹æ®Šæ“ä½œçš„å‡½æ•°
+void exclu();//æ±‚å‰å‡ åä¸ªç´ æ•°çš„ä¹˜ç§¯ï¼Œå­˜åœ¨æ–‡ä»¶ä¸­ï¼Œä¾¿äºåé¢æ‰¾ç´ æ•°çš„æ—¶å€™åˆ©ç”¨ä¹˜ç§¯æ±‚gcdï¼Œå¤šæ±‚gcdï¼Œå°‘è¿›è¡Œè´¹é©¬æ£€æµ‹
+int genBN_t(BN result, int bits);//äº§ç”Ÿbitsä¸ªäºŒè¿›åˆ¶ä½çš„å¤§æ•°resultï¼Œæ¯32ä½å“ˆå¸Œä¸€æ¬¡ï¼Œå¾ˆæ…¢
+int genBN(BN result, int bits);//åˆ©ç”¨sha-1ç»“æœäº§ç”Ÿbitsä¸ªäºŒè¿›åˆ¶ä½çš„å¤§æ•°result,æ¯5ä¸ª32ä½å“ˆå¸Œä¸€æ¬¡ï¼Œå¿«äº†ä¸€ç‚¹ç‚¹
+void writerand(char * addr);//æŠŠéšæœºæ•°å†™åˆ°addrä¸­ï¼Œåé¢å¯¹å®ƒæ±‚å“ˆå¸Œ
+int findprime(BN a, int bits);//å¯»æ‰¾bitsä½ç´ æ•°aï¼Œä¼šè°ƒç”¨genBNäº§ç”Ÿä¸€ä¸ªå¤§æ•°ï¼Œç„¶ååˆ©ç”¨exclu()ç»“æœè¿›è¡Œè°ƒæ•´æ‰å»è´¹é©¬
+void genpq(char * p_path, char * q_path);//äº§ç”Ÿç§é’¥på’Œqå­˜åœ¨p_pathå’Œq_pathæ–‡ä»¶ä¸­
 
-//SHA-1µÄº¯ÊıºÍ³£Êı
+//SHA-1çš„å‡½æ•°å’Œå¸¸æ•°
 uint32_t H0 = 0x67452301;
 uint32_t H1 = 0xEFCDAB89;
 uint32_t H2 = 0x98BADCFE;
@@ -251,14 +254,14 @@ const uint32_t K3 = 0xCA62C1D6;
 void subround(uint32_t & A, uint32_t & B, uint32_t & C, uint32_t & D, uint32_t & E, uint32_t &W, uint32_t K, int mode);
 long long msgsize(char*plainaddr);
 inline uint32_t cirleft(uint32_t word, int bit);
-int mysha1(char *inputfileaddr, char *output);//Ã¿´Îµ÷ÓÃÓÃµÄÊÇÈ«¾ÖµÄ£¬Ïàµ±ÓÚÒ»¸ö×´Ì¬ÏòÁ¿
-int SHA1(char *inputfileaddr, char *output);//Ã¿´Îµ÷ÓÃÀïÃæ»áÖØĞÂ³õÊ¼»¯ÏòÁ¿
-int checkresult(char * plainpath, char * decrypath);//¼ì²éÃ÷ÎÄºÍ½âÃÜÒÔºóÊÇ·ñÏàÍ¬£¬ÏàÍ¬·µ»Ø1
+int mysha1(char *inputfileaddr, char *output);//æ¯æ¬¡è°ƒç”¨ç”¨çš„æ˜¯å…¨å±€çš„ï¼Œç›¸å½“äºä¸€ä¸ªçŠ¶æ€å‘é‡
+int SHA1(char *inputfileaddr, char *output);//æ¯æ¬¡è°ƒç”¨é‡Œé¢ä¼šé‡æ–°åˆå§‹åŒ–å‘é‡
+int checkresult(char * plainpath, char * decrypath);//æ£€æŸ¥æ˜æ–‡å’Œè§£å¯†ä»¥åæ˜¯å¦ç›¸åŒï¼Œç›¸åŒè¿”å›1
 
 
-//×Ö·û´®ºÍÎÄ¼ş´¦Àí
-string bn2str(BN bignum);//bignum×ª»¯Îª×Ö·û´®ĞÎÊ½·µ»Ø£¬·µ»ØµÄ²»ÏÔÊ¾Ç°µ¼0£¬ºÍÕı³£Ô¤ÆÚÊÇÒ»ÑùµÄ£¬¿ÉÒÔÍÌÏÂBND
-int str2bn(BN & bignum, string strbn);//×Ö·û´®ĞÎÊ½µÄ×ª»¯Îª´óÊı£¬Ö»ÄÜ×ª»¯ÎªBN
-int readbn(BN &bignum, string filename);//´ÓÎÄ¼şfilenameÖĞ¶ÁÈ¡´óÊıµ½bignumÖĞ£¬×Ö·û´®ÊÇ16½øÖÆµÄ²»ÄÜÊÇ0x¿ªÍ·
-int writebn(string filename, BN bignum);//°Ñ´óÊıbignumĞ´Èëµ½ÎÄ¼şfilenameÖĞ£¬²»´øÇ°µ¼0ºÍÇ°×º0x
+//å­—ç¬¦ä¸²å’Œæ–‡ä»¶å¤„ç†
+string bn2str(BN bignum);//bignumè½¬åŒ–ä¸ºå­—ç¬¦ä¸²å½¢å¼è¿”å›ï¼Œè¿”å›çš„ä¸æ˜¾ç¤ºå‰å¯¼0ï¼Œå’Œæ­£å¸¸é¢„æœŸæ˜¯ä¸€æ ·çš„ï¼Œå¯ä»¥åä¸‹BND
+int str2bn(BN & bignum, string strbn);//å­—ç¬¦ä¸²å½¢å¼çš„è½¬åŒ–ä¸ºå¤§æ•°ï¼Œåªèƒ½è½¬åŒ–ä¸ºBN
+int readbn(BN &bignum, string filename);//ä»æ–‡ä»¶filenameä¸­è¯»å–å¤§æ•°åˆ°bignumä¸­ï¼Œå­—ç¬¦ä¸²æ˜¯16è¿›åˆ¶çš„ä¸èƒ½æ˜¯0xå¼€å¤´
+int writebn(string filename, BN bignum);//æŠŠå¤§æ•°bignumå†™å…¥åˆ°æ–‡ä»¶filenameä¸­ï¼Œä¸å¸¦å‰å¯¼0å’Œå‰ç¼€0x
 
