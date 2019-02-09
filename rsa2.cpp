@@ -1,9 +1,9 @@
 
-#include "D:/homework and study/ÃÜÂëÑ§/myÌØ±ğ¿ìµÄRSA and BN/bignum2.h"
+#include "bignum2.h"
 using namespace std;
 
 
-//¼Ó·¨¿ÉĞĞµÄ£¬È¡1024Î»
+//åŠ æ³•å¯è¡Œçš„ï¼Œå–1024ä½
 int add_b(BN a, BN b, BN sum)
 {
 	memset(sum, 0, BNSIZE);
@@ -11,7 +11,7 @@ int add_b(BN a, BN b, BN sum)
 	uint32_t *maptr, *mbptr;
 	uint64_t carry = 0U;
 	int flag = FLAG_OK;
-	if (DIGITS_B(a) < DIGITS_B(b))//ÈÃa±íÊ¾³¤µÄÄÇ¸ö
+	if (DIGITS_B(a) < DIGITS_B(b))//è®©aè¡¨ç¤ºé•¿çš„é‚£ä¸ª
 	{
 		aptr = LSDPTR_B(b);
 		maptr = MSDPTR_B(b);
@@ -28,43 +28,43 @@ int add_b(BN a, BN b, BN sum)
 		SETDIGITS_B(sum, DIGITS_B(a));
 	}
 
-	while (bptr <= mbptr)//¶ÌµÄ»¹Ã»ÓĞ¼ÓÍê
+	while (bptr <= mbptr)//çŸ­çš„è¿˜æ²¡æœ‰åŠ å®Œ
 	{
 		carry = (uint64_t)((uint64_t)(*aptr) + (uint64_t)(*bptr) + (uint64_t)(uint32_t)(carry >> BITPERDIGIT));
 		*sptr = (uint32_t)carry;
 		aptr++; bptr++; sptr++;
 	}
 
-	while (aptr <= maptr)//ºÍ¸Õ¸Õ²úÉúµÄ»òĞíÓĞµÄ½øÎ»Ïà¼Ó£¬·ñÔòºÍ×Ô¼º¼Ó
+	while (aptr <= maptr)//å’Œåˆšåˆšäº§ç”Ÿçš„æˆ–è®¸æœ‰çš„è¿›ä½ç›¸åŠ ï¼Œå¦åˆ™å’Œè‡ªå·±åŠ 
 	{
 		carry = (uint64_t)((uint64_t)(*aptr) + (uint64_t)(uint32_t)(carry >> BITPERDIGIT));
 		*sptr = (uint32_t)carry;
 		aptr++;  sptr++;
 	}
 
-	if (carry& BASE)//Èç¹û»¹ÓĞ½øÎ»1
+	if (carry& BASE)//å¦‚æœè¿˜æœ‰è¿›ä½1
 	{
 		*sptr = 1U;
 		INCDIGITS_B(sum);
 	}
 
-	if (DIGITS_B(sum) > (uint32_t)BNMAXDGT)//³¬¹ıÁË32¡°Î»¡±£¬ÉÏÒç³öÁË
+	if (DIGITS_B(sum) > (uint32_t)BNMAXDGT)//è¶…è¿‡äº†32â€œä½â€ï¼Œä¸Šæº¢å‡ºäº†
 	{
-		SETDIGITS_B(sum, BNMAXDGT);//ÏÈÉèÖÃ32¡°Î»¡±£¬¿ÉÄÜÓĞÇ°µ¼0,Ä£µô´óÓÚ32¡°Î»¡±µÄ
+		SETDIGITS_B(sum, BNMAXDGT);//å…ˆè®¾ç½®32â€œä½â€ï¼Œå¯èƒ½æœ‰å‰å¯¼0,æ¨¡æ‰å¤§äº32â€œä½â€çš„
 		RMLDZRS_B(sum);
-		flag = FLAG_OF;//¼Ó·¨ÉÏÒç³öÁË
+		flag = FLAG_OF;//åŠ æ³•ä¸Šæº¢å‡ºäº†
 	}
 	return flag;
 }
 
-//¼Ó·¨£¬¿ÉÒÔÍÌÏÂBNDµÄ¼Ó·¨
+//åŠ æ³•ï¼Œå¯ä»¥åä¸‹BNDçš„åŠ æ³•
 void add(BN a, BN b, BN sum)
 {
 	uint32_t *aptr, *bptr, *sptr = LSDPTR_B(sum);
 	uint32_t *maptr, *mbptr;
 	uint64_t carry = 0U;
 
-	if (DIGITS_B(a) < DIGITS_B(b))//ÈÃa±íÊ¾³¤µÄÄÇ¸ö
+	if (DIGITS_B(a) < DIGITS_B(b))//è®©aè¡¨ç¤ºé•¿çš„é‚£ä¸ª
 	{
 		aptr = LSDPTR_B(b);
 		maptr = MSDPTR_B(b);
@@ -81,21 +81,21 @@ void add(BN a, BN b, BN sum)
 		SETDIGITS_B(sum, DIGITS_B(a));
 	}
 
-	while (bptr <= mbptr)//¶ÌµÄ»¹Ã»ÓĞ¼ÓÍê
+	while (bptr <= mbptr)//çŸ­çš„è¿˜æ²¡æœ‰åŠ å®Œ
 	{
 		carry = (uint64_t)((uint64_t)(*aptr) + (uint64_t)(*bptr) + (uint64_t)(uint32_t)(carry >> BITPERDIGIT));
 		*sptr = (uint32_t)carry;
 		aptr++; bptr++; sptr++;
 	}
 
-	while (aptr <= maptr)//ºÍ¸Õ¸Õ²úÉúµÄ»òĞíÓĞµÄ½øÎ»Ïà¼Ó£¬·ñÔòºÍ×Ô¼º¼Ó
+	while (aptr <= maptr)//å’Œåˆšåˆšäº§ç”Ÿçš„æˆ–è®¸æœ‰çš„è¿›ä½ç›¸åŠ ï¼Œå¦åˆ™å’Œè‡ªå·±åŠ 
 	{
 		carry = (uint64_t)((uint64_t)(*aptr) + (uint64_t)(uint32_t)(carry >> BITPERDIGIT));
 		*sptr = (uint32_t)carry;
 		aptr++;  sptr++;
 	}
 
-	if (carry& BASE)//Èç¹û»¹ÓĞ½øÎ»1
+	if (carry& BASE)//å¦‚æœè¿˜æœ‰è¿›ä½1
 	{
 		*sptr = 1U;
 		INCDIGITS_B(sum);
@@ -112,7 +112,7 @@ int modadd_b(BN a, BN b, BN n, BN & result)
 	BN temp2;
 	memset(temp1, 0, BNSIZE);
 	memset(temp2, 0, BNSIZE);
-	if (cmp_b(n, ZERO_BN) == 0)//Èç¹ûÄ£ÊıÎª0
+	if (cmp_b(n, ZERO_BN) == 0)//å¦‚æœæ¨¡æ•°ä¸º0
 		add(a, b, result);
 	else
 	{
@@ -123,11 +123,11 @@ int modadd_b(BN a, BN b, BN n, BN & result)
 	return flag;
 }
 
-//¼ÓÒ»¸öuint32
+//åŠ ä¸€ä¸ªuint32
 int adduint_b(BN a, uint32_t b, BN sum)
 {
 	BND temp = { 0 };
-	temp[0] = 1; temp[1] = b;//ÏÖÔÚtempÊÇ´óÊı
+	temp[0] = 1; temp[1] = b;//ç°åœ¨tempæ˜¯å¤§æ•°
 	add(a, temp, sum);
 	return 0;
 }
@@ -135,21 +135,21 @@ int adduint_b(BN a, uint32_t b, BN sum)
 int adduint_b(uint32_t a, BN b, BN &sum)
 {
 	BN temp = { 0 };
-	temp[0] = 1; temp[1] = a;//ÏÖÔÚtempÊÇ´óÊı
+	temp[0] = 1; temp[1] = a;//ç°åœ¨tempæ˜¯å¤§æ•°
 	int flag = add_b(b, temp, sum);
 	return flag;
 }
 
-//Ä£1024Î»µÄÈ¡Ä£µÄ
+//æ¨¡1024ä½çš„å–æ¨¡çš„
 int sub_b(BN a, BN b, BN result)
 {
 	memset(result, 0, BNSIZE);
 	uint64_t carry = 0ULL;
 	uint32_t *aptr, *bptr, *rptr, *maptr, *mbptr;
 
-	int flag = FLAG_OK;//¼ìÑéÊÇ·ñ·¢ÉúÒâÍâÏÂÒç
+	int flag = FLAG_OK;//æ£€éªŒæ˜¯å¦å‘ç”Ÿæ„å¤–ä¸‹æº¢
 
-	uint32_t a_t[BITPERDIGIT + 2];//¶àÁË1Î»
+	uint32_t a_t[BITPERDIGIT + 2];//å¤šäº†1ä½
 	BN b_t;
 	memset(b_t, 0, sizeof(b_t));
 	cpy_b(a_t, a);
@@ -160,47 +160,47 @@ int sub_b(BN a, BN b, BN result)
 	maptr = MSDPTR_B(a_t);
 	mbptr = MSDPTR_B(b_t);
 
-	if (cmp_b(a_t, b_t) == -1)//Èç¹ûa<b
+	if (cmp_b(a_t, b_t) == -1)//å¦‚æœa<b
 	{
 		setmax_b(a_t);
-		maptr = a_t + BNMAXDGT;//Ö¸Ïò[31]
-		SETDIGITS_B(result, BNMAXDGT);//ÅÂÊÇ½á¹ûÒ²ÓĞÕâÃ´¶àÎ»£¬ÏÈÉèÕâÃ´¶à×îºóÏû³ı
-		flag = FLAG_UF;//ÏÂÒçÁË
+		maptr = a_t + BNMAXDGT;//æŒ‡å‘[31]
+		SETDIGITS_B(result, BNMAXDGT);//æ€•æ˜¯ç»“æœä¹Ÿæœ‰è¿™ä¹ˆå¤šä½ï¼Œå…ˆè®¾è¿™ä¹ˆå¤šæœ€åæ¶ˆé™¤
+		flag = FLAG_UF;//ä¸‹æº¢äº†
 	}
-	else//Ã»ÓĞ·¢ÉúÏÂÒç
+	else//æ²¡æœ‰å‘ç”Ÿä¸‹æº¢
 	{
-		SETDIGITS_B(result, DIGITS_B(a_t));//Î»ÊıÓ¦¸ÃºÍaÊÇÒ»ÑùµÄ
+		SETDIGITS_B(result, DIGITS_B(a_t));//ä½æ•°åº”è¯¥å’Œaæ˜¯ä¸€æ ·çš„
 	}
-	while (bptr <= mbptr)//b»¹ÓĞÎ»Êı£¬Àà±È¼Ó·¨
+	while (bptr <= mbptr)//bè¿˜æœ‰ä½æ•°ï¼Œç±»æ¯”åŠ æ³•
 	{
-		carry = (uint64_t)*aptr - (uint64_t)*bptr - ((carry&BASE) >> BITPERDIGIT);//a-b-ci(¿ÉÄÜÖ®Ç°½èÎ»ÁË)
+		carry = (uint64_t)*aptr - (uint64_t)*bptr - ((carry&BASE) >> BITPERDIGIT);//a-b-ci(å¯èƒ½ä¹‹å‰å€Ÿä½äº†)
 		*rptr = (uint32_t)carry;
 		aptr++; bptr++; rptr++;
 	}
-	while (aptr <= maptr)//a»¹Ã»ÓĞÍê,Àà±È¼Ó·¨
+	while (aptr <= maptr)//aè¿˜æ²¡æœ‰å®Œ,ç±»æ¯”åŠ æ³•
 	{
-		carry = (uint64_t)*aptr - ((carry&BASE) >> BITPERDIGIT);//a-b-ci(¿ÉÄÜÖ®Ç°½èÎ»ÁË)
+		carry = (uint64_t)*aptr - ((carry&BASE) >> BITPERDIGIT);//a-b-ci(å¯èƒ½ä¹‹å‰å€Ÿä½äº†)
 		*rptr = (uint32_t)carry;
 		aptr++; rptr++;
 	}
-	RMLDZRS_B(result);//Ïû³ıÇ°µ¼0
-	if (flag == FLAG_UF)//Èç¹ûÏÂÒçÁË£¬¸üÕıÒ»ÏÂ
+	RMLDZRS_B(result);//æ¶ˆé™¤å‰å¯¼0
+	if (flag == FLAG_UF)//å¦‚æœä¸‹æº¢äº†ï¼Œæ›´æ­£ä¸€ä¸‹
 	{
 		add_b(result, a, result);
 		add_b(result, ONE_BN, result);//(Nm-b+a)+1
 	}
 	return flag;
 }
-//¼õÒ»¸öuint32
+//å‡ä¸€ä¸ªuint32
 int subuint_b(BN a, uint32_t b, BN &result)
 {
 	BN temp = { 0 };
-	temp[0] = 1; temp[1] = b;//ÏÖÔÚtempÊÇ´óÊı
+	temp[0] = 1; temp[1] = b;//ç°åœ¨tempæ˜¯å¤§æ•°
 	int flag = sub_b(a, temp, result);
 	return flag;
 }
 
-//¼õ·¨
+//å‡æ³•
 void sub(BN a, BN b, BN result)
 {
 	uint32_t *aptr, *bptr, *rptr, *maptr, *mbptr;
@@ -211,15 +211,15 @@ void sub(BN a, BN b, BN result)
 	mbptr = MSDPTR_B(b);
 	rptr = LSDPTR_B(result);
 	SETDIGITS_B(result, DIGITS_B(a));
-	//Èç¹ûai<bi£¬carryµÄ¸ßÎ»»áÈ«Îª1¶ø²»ÊÇ0£¬ÅĞ¶ÏµÚ33Î»
-	//ÀıÈç2Î»¶ş½øÖÆ£¬»ùÊıÎª4µÄÇé¿ö£¬carryÊÇ4Î»£»01-1Ôòcaryy=1110;10-11=1111¡£ÅĞ¶Ï½èÎ»µÄÊ±ºò£¬ÅĞ¶Ï33Î»¶ş½øÖÆÎ»ÊÇ·ñÎª0¾Í¿ÉÒÔ
+	//å¦‚æœai<biï¼Œcarryçš„é«˜ä½ä¼šå…¨ä¸º1è€Œä¸æ˜¯0ï¼Œåˆ¤æ–­ç¬¬33ä½
+	//ä¾‹å¦‚2ä½äºŒè¿›åˆ¶ï¼ŒåŸºæ•°ä¸º4çš„æƒ…å†µï¼Œcarryæ˜¯4ä½ï¼›01-1åˆ™caryy=1110;10-11=1111ã€‚åˆ¤æ–­å€Ÿä½çš„æ—¶å€™ï¼Œåˆ¤æ–­33ä½äºŒè¿›åˆ¶ä½æ˜¯å¦ä¸º0å°±å¯ä»¥
 	while (bptr <= mbptr)
 	{
 		carry = (uint64_t)((uint64_t)(*aptr) - (uint64_t)(*bptr) - (uint64_t)((carry&BASE) >> BITPERDIGIT));
 		*rptr = (uint32_t)carry;
 		aptr++; bptr++; rptr++;
 	}
-	while (aptr <= maptr)//¿ÉÄÜÁ¬Ğø½èÎ»
+	while (aptr <= maptr)//å¯èƒ½è¿ç»­å€Ÿä½
 	{
 		carry = (uint64_t)((uint64_t)(*aptr) - (uint64_t)((carry&BASE) >> BITPERDIGIT));
 		*rptr = (uint32_t)carry;
@@ -235,7 +235,7 @@ void modsub_b(BN a, BN b, BN n, BN &result)
 	memset(rem, 0, sizeof(temp));
 	cpy_b(a_t, a);
 	cpy_b(b_t, b);
-	if (cmp_b(a_t, b_t) >= 0)//Èç¹ûa>=b
+	if (cmp_b(a_t, b_t) >= 0)//å¦‚æœa>=b
 	{
 		//sub_b(a_t, b_t, temp);
 		sub(a_t, b_t, temp);
@@ -246,7 +246,7 @@ void modsub_b(BN a, BN b, BN n, BN &result)
 		//cout << bn2str(temp) << " % " << bn2str(n) << " = " << bn2str(rem) << endl;
 		cpy_b(result, rem);
 	}
-	else //a<b...ÄÇ¾Íb-a=t£¬È»ºóÓÃn-t  12-19 mod 5  19-12 mod 5 =2  5-2=3
+	else //a<b...é‚£å°±b-a=tï¼Œç„¶åç”¨n-t  12-19 mod 5  19-12 mod 5 =2  5-2=3
 	{
 		//sub_b(b_t, a_t, temp);
 		sub(b_t, a_t, temp);
@@ -259,7 +259,7 @@ void modsub_b(BN a, BN b, BN n, BN &result)
 	}
 }
 
-//³Ë·¨È¡1024Î»
+//ä¹˜æ³•å–1024ä½
 int mul_b(BN a, BN b, BN & result)
 {
 	BN a_t = { 0 }, b_t = { 0 };
@@ -290,21 +290,21 @@ int mul_b(BN a, BN b, BN & result)
 	int pos = 0;
 	for (bptr = LSDPTR_B(b_t), pptr = LSDPTR_B(temp); bptr <= mbptr; bptr++)
 	{
-		carry = 0;//Ç°Ò»´Î½øÎ»ÒÑ¾­´æÔÚÁË×î¸ßÎ»
+		carry = 0;//å‰ä¸€æ¬¡è¿›ä½å·²ç»å­˜åœ¨äº†æœ€é«˜ä½
 		for (aptr = LSDPTR_B(a_t); aptr <= maptr; aptr++, pptr++)
 		{
 			carry = (uint64_t)((uint64_t)(*aptr) * (uint64_t)(*bptr) + (uint64_t)(*pptr)
 				+ (uint64_t)(uint32_t)(carry >> BITPERDIGIT));
-			*pptr = (uint32_t)carry;//µÍ32ÊÇ±¾Î»»ı
+			*pptr = (uint32_t)carry;//ä½32æ˜¯æœ¬ä½ç§¯
 		}
-		pos++;//»¬¶¯Ò»Î»
-		*pptr = (uint32_t)(carry >> BITPERDIGIT);//×îºóÒ»Î»½øÎ»
-		pptr = LSDPTR_B(temp) + pos;//»Øµ½¿ªÍ·
+		pos++;//æ»‘åŠ¨ä¸€ä½
+		*pptr = (uint32_t)(carry >> BITPERDIGIT);//æœ€åä¸€ä½è¿›ä½
+		pptr = LSDPTR_B(temp) + pos;//å›åˆ°å¼€å¤´
 	}
 	SETDIGITS_B(temp, DIGITS_B(a) + DIGITS_B(b));
 	RMLDZRS_B(temp);
 
-	if (DIGITS_B(temp) > BNMAXDGT)//´óÓÚ1024È¡1024Î»
+	if (DIGITS_B(temp) > BNMAXDGT)//å¤§äº1024å–1024ä½
 	{
 		SETDIGITS_B(temp, BNMAXDGT);
 		RMLDZRS_B(temp);
@@ -312,7 +312,7 @@ int mul_b(BN a, BN b, BN & result)
 	cpy_b(result, temp);
 	return FLAG_OK;
 }
-//³Ë·¨
+//ä¹˜æ³•
 int mul(BN a, BN b, BN result)
 {
 	BN a_t = { 0 }, b_t = { 0 };
@@ -339,19 +339,19 @@ int mul(BN a, BN b, BN result)
 	cpy_b(b_t, b);
 	maptr = MSDPTR_B(a_t);
 	mbptr = MSDPTR_B(b_t);
-	int pos = 0;//Ã¿´ÎpÍùÇ°»¬¶¯Ò»Î»
+	int pos = 0;//æ¯æ¬¡på¾€å‰æ»‘åŠ¨ä¸€ä½
 	for (bptr = LSDPTR_B(b_t), pptr = LSDPTR_B(temp); bptr <= mbptr; bptr++)
 	{
-		carry = 0;//Ç°Ò»´Î½øÎ»ÒÑ¾­´æÔÚÁË×î¸ßÎ»
+		carry = 0;//å‰ä¸€æ¬¡è¿›ä½å·²ç»å­˜åœ¨äº†æœ€é«˜ä½
 		for (aptr = LSDPTR_B(a_t); aptr <= maptr; aptr++, pptr++)
 		{
 			carry = (uint64_t)((uint64_t)(*aptr) * (uint64_t)(*bptr) + (uint64_t)(*pptr)
 				+ (uint64_t)(uint32_t)(carry >> BITPERDIGIT));
-			*pptr = (uint32_t)carry;//µÍ32ÊÇ±¾Î»»ı
+			*pptr = (uint32_t)carry;//ä½32æ˜¯æœ¬ä½ç§¯
 		}
-		pos++;//»¬¶¯Ò»Î»
-		*pptr = (uint32_t)(carry >> BITPERDIGIT);//×îºóÒ»Î»½øÎ»
-		pptr = LSDPTR_B(temp) + pos;//»Øµ½¿ªÍ·	
+		pos++;//æ»‘åŠ¨ä¸€ä½
+		*pptr = (uint32_t)(carry >> BITPERDIGIT);//æœ€åä¸€ä½è¿›ä½
+		pptr = LSDPTR_B(temp) + pos;//å›åˆ°å¼€å¤´	
 	}
 	/*cout << "bits of a is" << getbits_b(a_t) << endl;
 	cout << "pos is " << pos << endl;
@@ -363,12 +363,12 @@ int mul(BN a, BN b, BN result)
 	return FLAG_OK;
 }
 
-//Ä£³Ë
+//æ¨¡ä¹˜
 void modmul(BN a, BN b, BN n, BN & result)
 {
-	//cout << "line 369  aÎ»ÊıÎª " << getbits_b(a) << endl;
-	//cout << "line 369  bÎ»ÊıÎª " << getbits_b(b) << endl;
-	//cout << "line 369  nÎ»ÊıÎª " << getbits_b(n) << endl;
+	//cout << "line 369  aä½æ•°ä¸º " << getbits_b(a) << endl;
+	//cout << "line 369  bä½æ•°ä¸º " << getbits_b(b) << endl;
+	//cout << "line 369  nä½æ•°ä¸º " << getbits_b(n) << endl;
 	memset(result, 0, sizeof(result));
 	BN a_t = { 0 }, b_t = { 0 };
 	BND temp = { 0 };
@@ -381,15 +381,15 @@ void modmul(BN a, BN b, BN n, BN & result)
 	cpy_b(b_t, b);
 
 	mul(a_t, b_t, temp);
-	//cout << "line 384  ³Ë»ıÎ»ÊıÎª " << getbits_b(temp) << endl;
-	//cout << "lint652?ÎÊÌâÔÚ653£¡£¡£¡" << endl;
+	//cout << "line 384  ä¹˜ç§¯ä½æ•°ä¸º " << getbits_b(temp) << endl;
+	//cout << "lint652?é—®é¢˜åœ¨653ï¼ï¼ï¼" << endl;
 	modn_b(temp, n, result);
 
 }
 
-string bn2str(BN bignum)//´óÊı×ªÎª×Ö·û´®
+string bn2str(BN bignum)//å¤§æ•°è½¬ä¸ºå­—ç¬¦ä¸²
 {
-	if (DIGITS_B(bignum) == 0)//Èç¹ûÊÇ0ĞèÒªÏÔÊ¾Õâ¸ö0
+	if (DIGITS_B(bignum) == 0)//å¦‚æœæ˜¯0éœ€è¦æ˜¾ç¤ºè¿™ä¸ª0
 		return string("0");
 	//char strbignum[265] = { 0 };//(1024+32)/4
 	//BN temp;
@@ -397,7 +397,7 @@ string bn2str(BN bignum)//´óÊı×ªÎª×Ö·û´®
 	BND temp;
 	cpy_b(temp, bignum);
 
-	for (int i = DIGITS_B(temp), j = 0; i > 0; i = i - 1, j++)//µÚ¼¸Î»Ë÷Òı¾ÍÊÇ¼¸£¡£¡£¡
+	for (int i = DIGITS_B(temp), j = 0; i > 0; i = i - 1, j++)//ç¬¬å‡ ä½ç´¢å¼•å°±æ˜¯å‡ ï¼ï¼ï¼
 	{
 		sprintf(&strbignum[8 * j], "%08X", temp[i]);
 	}
@@ -412,14 +412,14 @@ string bn2str(BN bignum)//´óÊı×ªÎª×Ö·û´®
 		else break;
 	}
 	//cout << "zeros =" << zeros << endl;
-	//int index=rmzero.rfind("0");//È¥µô¿´µÃ¼ûµÄÇ°µ¼0
+	//int index=rmzero.rfind("0");//å»æ‰çœ‹å¾—è§çš„å‰å¯¼0
 	if (zeros >= 1)
 	{
 		//string finalstr(strbignum + zeros, &strbignum[264]);
 		string finalstr(strbignum + zeros, &strbignum[519]);
 		char * cstr = new char[finalstr.length() + 1];
 		std::strcpy(cstr, finalstr.c_str());
-		finalstr = string(cstr);//È¥µôNULL 
+		finalstr = string(cstr);//å»æ‰NULL 
 		//printf("length of bn2str is %d\n", finalstr.length());
 		delete[] cstr;
 		return finalstr;
@@ -437,17 +437,17 @@ string bn2str(BN bignum)//´óÊı×ªÎª×Ö·û´®
 	}
 }
 
-int str2bn(BN & bignum, string strbn)//×Ö·û´®×ª»»Îª´óÊı
+int str2bn(BN & bignum, string strbn)//å­—ç¬¦ä¸²è½¬æ¢ä¸ºå¤§æ•°
 {
 	BN t = { 0 };
 	char *perbit = new char[9];
 	memset(perbit, 0, 9);
 	int digits = 0;
-	digits = (strbn.length() + 7) / 8;//Î»Êı
+	digits = (strbn.length() + 7) / 8;//ä½æ•°
 	//cout << "digits=" << digits << endl;
 	int i = 0;
 	int pos = strbn.length() - 8;
-	for (i = 0; i < digits - 1; i++)//²»ÄÜÊÇdigits-1!!!!!
+	for (i = 0; i < digits - 1; i++)//ä¸èƒ½æ˜¯digits-1!!!!!
 	{
 		//printf("i=%d\n", i);
 		//temp.insert(0, strbn, pos,8);
@@ -472,7 +472,7 @@ int str2bn(BN & bignum, string strbn)//×Ö·û´®×ª»»Îª´óÊı
 	return FLAG_OK;
 }
 
-int readbn(BN &bignum, string filename)//´ÓÎÄ±¾ÖĞ¶ÁÈ¡´óÊı
+int readbn(BN &bignum, string filename)//ä»æ–‡æœ¬ä¸­è¯»å–å¤§æ•°
 {
 	BN temp;
 	ifstream fin;
@@ -488,12 +488,12 @@ int readbn(BN &bignum, string filename)//´ÓÎÄ±¾ÖĞ¶ÁÈ¡´óÊı
 	SETDIGITS_B(temp, 32);
 	str2bn(temp, strbignum);
 	cpy_b(bignum, temp);
-	//cout << "´óÊıÊÇ " << bn2str(temp)<< endl;
+	//cout << "å¤§æ•°æ˜¯ " << bn2str(temp)<< endl;
 	fin.close();
 	return FLAG_OK;
 }
 
-int writebn(string filename, BN bignum)//Ğ´Èë´óÊıµ½ÎÄ±¾
+int writebn(string filename, BN bignum)//å†™å…¥å¤§æ•°åˆ°æ–‡æœ¬
 {
 	ofstream fout;
 	fout.open(filename);
@@ -525,10 +525,10 @@ int modn_b(BN a, BN n, BN & rem)
 {
 
 	//cout << "in line 527 modn_b    a mod n =rem " << endl;
-	//cout << "line 527 aÎ»ÊıÎª " << getbits_b(a) << endl;
-	//cout << "line 527 nÎ»ÊıÎª " << getbits_b(n) << endl;
-	//cout << "line 527 aÎª " << bn2str(a) << endl;
-	//cout << "line 527 nÎª " << bn2str(n) << endl;
+	//cout << "line 527 aä½æ•°ä¸º " << getbits_b(a) << endl;
+	//cout << "line 527 nä½æ•°ä¸º " << getbits_b(n) << endl;
+	//cout << "line 527 aä¸º " << bn2str(a) << endl;
+	//cout << "line 527 nä¸º " << bn2str(n) << endl;
 	//cout << "OKD" << endl;
 	int flag = FLAG_OK;
 	BND temp;
@@ -574,13 +574,13 @@ int gcd_b(BN a, BN b, BN & result)
 	memset(result, 0, BNSIZE);
 	int flag = FLAG_OK;
 
-	BN a_t, b_t, rn_1, rn;//´æ·ÅÁ½¸öÓàÊıÓÃ
+	BN a_t, b_t, rn_1, rn;//å­˜æ”¾ä¸¤ä¸ªä½™æ•°ç”¨
 	memset(a_t, 0, BNSIZE);
 	memset(b_t, 0, BNSIZE);
 	memset(rn, 0, BNSIZE);
 	cpy_b(a_t, a);
 	cpy_b(b_t, b);
-	cpy_b(rn_1, b);//ÍòÒ»rn=0
+	cpy_b(rn_1, b);//ä¸‡ä¸€rn=0
 	if (DIGITS_B(a_t) == 0)
 	{
 		cpy_b(result, b_t);
@@ -613,23 +613,23 @@ int gcd_b(BN a, BN b, BN & result)
 	return flag;
 }
 
-//Èç¹û(a,n)=1,ÔòÓĞax = 1 (mod n)£»·ñÔòÒì³£Ã»ÓĞÄæÔª£¬·µ»Ø0£¬ÏÔÈ»ÄæÔª²»¿ÉÄÜÎª0  
+//å¦‚æœ(a,n)=1,åˆ™æœ‰ax = 1 (mod n)ï¼›å¦åˆ™å¼‚å¸¸æ²¡æœ‰é€†å…ƒï¼Œè¿”å›0ï¼Œæ˜¾ç„¶é€†å…ƒä¸å¯èƒ½ä¸º0  
 int inv_b(BN a, BN n, BN & x)
 {
 
 	memset(x, 0, BNSIZE);
 	BN u = { 0 }, g = { 0 }, v1 = { 0 }, v3 = { 0 }, q = { 0 }, t3 = { 0 }, t1 = { 0 };
-	BN temp;//±£´æÖĞ¼ä½á¹û
+	BN temp;//ä¿å­˜ä¸­é—´ç»“æœ
 	gcd_b(a, n, g);
 
 
-	if (cmp_b(g, ONE_BN) != 0)//Èç¹û²»»¥ËØ£¬Ã»ÓĞÄæÔª
+	if (cmp_b(g, ONE_BN) != 0)//å¦‚æœä¸äº’ç´ ï¼Œæ²¡æœ‰é€†å…ƒ
 	{
 		SETZERO_B(x);
 		return FLAG_NOINV;
 	}
 	memset(g, 0, sizeof(g));
-	//³õÊ¼»¯
+	//åˆå§‹åŒ–
 	cpy_b(u, ONE_BN);//u=1
 	cpy_b(g, a);//g=a
 	SETZERO_B(v1);//v1=0
@@ -660,6 +660,100 @@ int inv_b(BN a, BN n, BN & x)
 	return FLAG_OK;
 }
 
+//å¦ä¸€ä¸ªå°½é‡ç”¨ç§»ä½å’ŒåŠ å‡æ³•å®ç°çš„æ±‚é€†æ–¹æ³•ï¼Œç†è®ºä¸Šåº”è¯¥æ›´å¿«
+//å¦‚æœ(a,n)=1,åˆ™æœ‰ax = 1 (mod n)ï¼›å¦åˆ™å¼‚å¸¸æ²¡æœ‰é€†å…ƒï¼Œè¿”å›0ï¼Œæ˜¾ç„¶é€†å…ƒä¸å¯èƒ½ä¸º0  
+int new_inv(BN a, BN n, BN & x)
+{
+
+	memset(x, 0, BNSIZE);
+	BN   x1 = { 0 }, y1 = { 0 }, x2 = { 0 }, y2 = { 0 };
+	BN temp1 = { 0 }, temp2 = { 0 };//ä¿å­˜ä¸­é—´ç»“æœ
+
+
+	if (cmp_b(a, ONE_BN) == 0)//å¦‚æœæ˜¯1,é€†å…ƒå°±æ˜¯1
+	{
+		SETONEBIT_B(x, 1U);
+		return FLAG_OK;
+	}
+
+	gcd_b(a, n, temp1);//æ±‚å…¬å› å­ï¼Œåˆ¤æ–­æœ‰æ²¡æœ‰é€†å…ƒ
+	if (cmp_b(temp1, ONE_BN) != 0)//å¦‚æœä¸äº’ç´ ï¼Œæ²¡æœ‰é€†å…ƒ
+	{
+		SETZERO_B(x);
+		return FLAG_NOINV;
+	}
+
+	//æœ‰é€†å…ƒï¼Œå°±å¼€å§‹æ±‚ã€‚æ–¹ç¨‹x=y*a (mod n)æœ‰å¹³å‡¡è§£(x1,y1)=(a,1)  (x2,y2)=(n,0)
+	//åˆå§‹åŒ–x1=a,y1=1  x2=n,y2=0
+	cpy_b(x1, a);
+	cpy_b(x2, n);
+	cpy_b(y1, ONE_BN);
+	cpy_b(y2, ZERO_BN);
+	int i = 0;
+	do
+	{
+		while (uint32_t(x1[1] & 1U) == 0U)//Cä¸­éœ€è¦æ³¨æ˜å¼ºåˆ¶ç±»å‹ï¼Œå¦åˆ™x1[1] & 1Uå±…ç„¶ä¸ç­‰äº0Uï¼Œä¹Ÿä¸ç­‰äº0,åœ¨æœ¬ç³»ç»Ÿé»˜è®¤æ˜¯0UL
+		{
+			shr_b(x1);
+			if(uint32_t(y1[1] & 1U) == 0U)
+				shr_b(y1);
+			else {
+				add(y1, n, y1);
+				shr_b(y1);
+			}
+		}
+		while (uint32_t(x2[1] & 1U) == 0U)
+		{
+			shr_b(x2);
+			if (uint32_t(y2[1] & 1U) == 0U)
+				shr_b(y2);
+			else {
+				add(y2, n, y2);
+				shr_b(y2);
+			}
+		}
+		if ((x1[0] == 1 && x1[1] == 1) || (x2[0] == 1 && x2[1] == 1))
+			break;
+		if (x1[0]>=x2[0] && cmp_b(x1, x2) > 0)//x1>x2æ—¶,x1=x1-x2,y1=y1-y2
+		{
+			sub(x1, x2, x1);
+			if (y1[0] <= y2[0] && cmp_b(y1, y2) < 0)//å¦‚æœy1<y2ï¼Œy1=n-(y2-y1)
+			{
+				sub(y2, y1, temp1);
+				sub(n, temp1, y1);
+			}
+			else {
+				sub(y1, y2, y1);
+			}
+		}
+		else//x1<x2,x2=x2-x1,y2=y2-y1
+		{
+			sub(x2, x1, x2);
+			if (y2[0] <= y1[0] && cmp_b(y2, y1) < 0)//å¦‚æœy2<y1ï¼Œy1=n-(y1-y2)
+			{
+				sub(y1, y2, temp1);
+				sub(n, temp1, y2);
+			}
+			else {
+				sub(y2, y1, y2);
+			}
+		}
+		if ((x1[0] == 1 && x1[1] == 1) || (x2[0] == 1 && x2[1] == 1))
+			break;
+
+	} while (1);
+
+	//åˆå§‹åŒ–
+	if (x1[0] == 1 && x1[1] == 1)
+	{
+		cpy_b(x, y1);
+	}
+	else {
+		cpy_b(x, y2);
+	}
+	return FLAG_OK;
+}
+
 //result= b^n (mod m)
 int modexp_b(BN b, BN n, BN m, BN & result)
 {
@@ -667,26 +761,26 @@ int modexp_b(BN b, BN n, BN m, BN & result)
 	//cout << "b = " << bn2str(n) << endl;
 	//cout << "m = " << bn2str(m) << endl;
 	memset(result, 0, sizeof(result));
-	BN a_t = { 1,1 }, b_t;//a=1;n×öÁË¶ş½øÖÆÕ¹¿ª
-	BN temp1 = { 0 }, temp2 = { 0 };//¼ÆËã×÷ÎªresultÓĞ¸öÇåÁã²Ù×÷
-	cpy_b(b_t, b);//b_t=b,³õÊ¼»¯
+	BN a_t = { 1,1 }, b_t;//a=1;nåšäº†äºŒè¿›åˆ¶å±•å¼€
+	BN temp1 = { 0 }, temp2 = { 0 };//è®¡ç®—ä½œä¸ºresultæœ‰ä¸ªæ¸…é›¶æ“ä½œ
+	cpy_b(b_t, b);//b_t=b,åˆå§‹åŒ–
 	uint32_t *nptr, *mnptr;
 	nptr = LSDPTR_B(n);
-	mnptr = MSDPTR_B(n);//£¡£¡£¡£¡£¡£¡£¡
-	char binform[33];//Ã¿¸ö32bitµÄuint32×ª»¯Îª¶ş½øÖÆ¼´¿É£¬Ò»´Î´ÎÈ¡³öÀ´
+	mnptr = MSDPTR_B(n);//ï¼ï¼ï¼ï¼ï¼ï¼ï¼
+	char binform[33];//æ¯ä¸ª32bitçš„uint32è½¬åŒ–ä¸ºäºŒè¿›åˆ¶å³å¯ï¼Œä¸€æ¬¡æ¬¡å–å‡ºæ¥
 	int i = 0;
 	//cout << "\na= " << bn2str(a_t) << "  b= " << bn2str(b_t) << endl << endl;
-	while (nptr <= mnptr)//Ã»Ô½½ç¾Í¶¼À´×ö
+	while (nptr <= mnptr)//æ²¡è¶Šç•Œå°±éƒ½æ¥åš
 	{
 
 		memset(binform, 0, sizeof(binform));
 		_ultoa(*nptr, binform, 2);
 		//printf("binform=%s\n", binform);
-		i = strlen(binform) - 1;//µ½´ï×îºóÒ»Î»
-		for (int j = 31; j >= 0; j--)//¿ªÊ¼Ä£Æ½·½
+		i = strlen(binform) - 1;//åˆ°è¾¾æœ€åä¸€ä½
+		for (int j = 31; j >= 0; j--)//å¼€å§‹æ¨¡å¹³æ–¹
 		{
 			//cout << "\nai-1= " << bn2str(a_t) << "  bi-1= " << bn2str(b_t) << endl;
-			if (i >= 0)//ÕıÊÂ¶ù£¬·ñÔòÖ»ÊÇÆ½·½bÈ¡Ä£
+			if (i >= 0)//æ­£äº‹å„¿ï¼Œå¦åˆ™åªæ˜¯å¹³æ–¹bå–æ¨¡
 			{
 				/*cout <<endl<<31-j<< ": ai-1= " << bn2str(a_t) << "  bi-1= " << bn2str(b_t) << endl;*/
 				//printf("i=%d : %c\n", i, binform[i]);
@@ -703,16 +797,16 @@ int modexp_b(BN b, BN n, BN m, BN & result)
 				}
 				//printf("i=%d : %c\n", i, binform[i]);
 
-				//ÆäËüÇé¿öÏÂ²»ÓÃ¶¯a_t
+				//å…¶å®ƒæƒ…å†µä¸‹ä¸ç”¨åŠ¨a_t
 				i--;
 
 			}
 			//cout << "j=" << j << endl;
-			/*cout << "b_tÎ»ÊıÎª " << getbits_b(b_t) << endl;*/
+			/*cout << "b_tä½æ•°ä¸º " << getbits_b(b_t) << endl;*/
 
 			modmul(b_t, b_t, m, temp2);//b=b*b mod m	
 
-			/*cout << "ÎÊÌâ³öÔÚmodmul!!!line 1776" << endl;*/
+			/*cout << "é—®é¢˜å‡ºåœ¨modmul!!!line 1776" << endl;*/
 			cpy_b(b_t, temp2);
 			/*cout <<endl<<31-j<< ": ai= " << bn2str(a_t) << "  bi= " << bn2str(b_t) << endl << endl;*/
 
@@ -725,7 +819,7 @@ int modexp_b(BN b, BN n, BN m, BN & result)
 	return FLAG_OK;
 }
 
-//·ÑÂí¼ì²â
+//è´¹é©¬æ£€æµ‹
 int fermat_b(BN a)
 {
 	BN n2 = { 1,2 };
@@ -736,7 +830,7 @@ int fermat_b(BN a)
 	BN temp1, temp2;
 
 	if (a[1] % 2 == 0 || a[1] % 5 == 0)
-		return 0;//·ñ
+		return 0;//å¦
 
 	gcd_b(a, n2, temp1);
 	if (temp1[0] > 1 || temp1[1] != 1)
@@ -758,24 +852,24 @@ int fermat_b(BN a)
 
 	//sub_b(a, ONE_BN, temp1);//temp1=a-1
 	sub(a, ONE_BN, temp1);//temp1=a-1
-	modexp_b(n2, temp1, a, temp2);// n2^(a-1) mod a!=1¾Í³ö´í
+	modexp_b(n2, temp1, a, temp2);// n2^(a-1) mod a!=1å°±å‡ºé”™
 	if (temp2[0] > 1 || temp2[1] != 1)
 		return 0;
 	//cout << "here" << endl;
 
-	modexp_b(n3, temp1, a, temp2);// n2^(a-1) mod a!=1¾Í³ö´í
+	modexp_b(n3, temp1, a, temp2);// n2^(a-1) mod a!=1å°±å‡ºé”™
 	if (temp2[0] > 1 || temp2[1] != 1)
 		return 0;
 
-	modexp_b(n5, temp1, a, temp2);// n2^(a-1) mod a!=1¾Í³ö´í
+	modexp_b(n5, temp1, a, temp2);// n2^(a-1) mod a!=1å°±å‡ºé”™
 	if (temp2[0] > 1 || temp2[1] != 1)
 		return 0;
 
-	modexp_b(n7, temp1, a, temp2);// n2^(a-1) mod a!=1¾Í³ö´í
+	modexp_b(n7, temp1, a, temp2);// n2^(a-1) mod a!=1å°±å‡ºé”™
 	if (temp2[0] > 1 || temp2[1] != 1)
 		return 0;
 
-	return 1;//ÊÇËØÊı
+	return 1;//æ˜¯ç´ æ•°
 }
 
 /*
@@ -787,10 +881,10 @@ M1=m2=q   M2=m1=p
 M1*M1'=1 mod p    M2*M2'=1  mod q
 result= b1*M1'*M1 + b2* M2'*M2  mod(m)
 */
-void crt_b(BN a, BN b, BN p, BN q, BN & result)//¼ÆËãa^b mod (p*q)
+void crt_b(BN a, BN b, BN p, BN q, BN & result)//è®¡ç®—a^b mod (p*q)
 {
 	BN b1, b2, M1p, M2p, m;
-	BN tb1, tb2, pdec1, qdec1;//Ä£µôÅ·À­º¯ÊıÒÔºóµÄ·Ö±ğµÄÖ¸Êı
+	BN tb1, tb2, pdec1, qdec1;//æ¨¡æ‰æ¬§æ‹‰å‡½æ•°ä»¥åçš„åˆ†åˆ«çš„æŒ‡æ•°
 	subuint_b(p, 1, pdec1);
 	subuint_b(q, 1, qdec1);
 
@@ -815,8 +909,8 @@ void crt_b(BN a, BN b, BN p, BN q, BN & result)//¼ÆËãa^b mod (p*q)
 }
 
 /*
-H=Ç°50¸öËØÊı³Ë»ı£¬Èç¹ûgcd(p,50)=x,x>1£¬ÄÇÃ´£¬Èç¹ûx=7£¬p+2*3*5¿Ï¶¨²»ÊÇ2 3 5µÄ£¬È»ºóÔÙ´ÓÍ·À´Åª
-Èç¹û p+2*3*5·µ»ØµÄgcdÓĞ2/3/5£¬ÄÇ»ØÍËÒ»²½£¬Ö®Ç°µÄ¼Ó·¨²»Òª2/3/5ÖĞµÄÒ»¸ö»òÕßÁ½¸ö
+H=å‰50ä¸ªç´ æ•°ä¹˜ç§¯ï¼Œå¦‚æœgcd(p,50)=x,x>1ï¼Œé‚£ä¹ˆï¼Œå¦‚æœx=7ï¼Œp+2*3*5è‚¯å®šä¸æ˜¯2 3 5çš„ï¼Œç„¶åå†ä»å¤´æ¥å¼„
+å¦‚æœ p+2*3*5è¿”å›çš„gcdæœ‰2/3/5ï¼Œé‚£å›é€€ä¸€æ­¥ï¼Œä¹‹å‰çš„åŠ æ³•ä¸è¦2/3/5ä¸­çš„ä¸€ä¸ªæˆ–è€…ä¸¤ä¸ª
 */
 
 void exclu()
@@ -826,7 +920,7 @@ void exclu()
 		"40primefac.txt"
 	};
 	int prenum[5] = { 20,25,30,35,40 };
-	//Ç°50¸öËØÊı
+	//å‰50ä¸ªç´ æ•°
 	unsigned int prime[50] =
 	{
 		2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,61,67,71,73,79,83,89,97,101,103,107,109,113,
@@ -855,13 +949,13 @@ void exclu()
 	//cout << fac << endl;
 }
 
-//ÓÒÒÆ1Î»
+//å³ç§»1ä½
 int shr_b(BN a)
 {
 	uint32_t *aptr;
 	uint32_t current, undercarry = 0;
 
-	if (DIGITS_B(a) == 0)//Îª0¾Í²»ÓÃÒÆ¶¯ÁË
+	if (DIGITS_B(a) == 0)//ä¸º0å°±ä¸ç”¨ç§»åŠ¨äº†
 	{
 		return FLAG_UF;
 	}
@@ -870,15 +964,15 @@ int shr_b(BN a)
 	{
 		current = (uint32_t)((uint32_t)(*aptr >> 1) | (uint32_t)(undercarry << (BITPERDIGIT - 1)));
 
-		undercarry = (uint32_t)(*aptr & 1U);//´Ó¸ß¡°Î»¡±ÒÆÈëµÍ¡°Î»¡±ÖĞµÄÄÇÎ»£¬½«ÔÚÏÂÒ»Î»×î¸ßÎ»
+		undercarry = (uint32_t)(*aptr & 1U);//ä»é«˜â€œä½â€ç§»å…¥ä½â€œä½â€ä¸­çš„é‚£ä½ï¼Œå°†åœ¨ä¸‹ä¸€ä½æœ€é«˜ä½
 
-		*aptr = current;//ÉèÖÃÎª±¾Î»×óÒÆ1Î»£¬±¾Î»×î¸ßÎ»Îª´ÓÇ°Ò»Î»ÒÆÏÂÀ´µÄ
+		*aptr = current;//è®¾ç½®ä¸ºæœ¬ä½å·¦ç§»1ä½ï¼Œæœ¬ä½æœ€é«˜ä½ä¸ºä»å‰ä¸€ä½ç§»ä¸‹æ¥çš„
 	}
 
 	RMLDZRS_B(a);
 	return FLAG_OK;
 }
-//×óÒÆ1Î»
+//å·¦ç§»1ä½
 int shl_b(BN a)
 {
 	uint32_t *aptr, *maptr;
@@ -899,9 +993,9 @@ int shl_b(BN a)
 		*aptr = (uint32_t)carry;
 	}
 
-	if (carry >> BITPERDIGIT)//Èç¹ûcarry×îºó»¹½øÁË1Î»£¬ºÍ¼Ó·¨Ò»Ñù´¦Àí£¬¼ÓÒ»Î»1£¬Í¬Ê±¼Ó1¡°Î»¡±
+	if (carry >> BITPERDIGIT)//å¦‚æœcarryæœ€åè¿˜è¿›äº†1ä½ï¼Œå’ŒåŠ æ³•ä¸€æ ·å¤„ç†ï¼ŒåŠ ä¸€ä½1ï¼ŒåŒæ—¶åŠ 1â€œä½â€
 	{
-		if (DIGITS_B(a) < BNDMAXBIT)//Èç¹ûÔÚBND·¶Î§ÄÚ
+		if (DIGITS_B(a) < BNDMAXBIT)//å¦‚æœåœ¨BNDèŒƒå›´å†…
 		{
 			*aptr = 1U;
 			INCDIGITS_B(a);
@@ -917,25 +1011,25 @@ int shl_b(BN a)
 	return error;
 }
 
-//»ñÈ¡¶ş½øÖÆÎ»Êı£¬¿ÉÒÔÊÇBND a
+//è·å–äºŒè¿›åˆ¶ä½æ•°ï¼Œå¯ä»¥æ˜¯BND a
 uint32_t getbits_b(BN a)
 {
 	uint32_t bits = DIGITS_B(a);
 	uint32_t high;
 
-	while (a[bits] == 0 && bits > 0)//Ïû³ıÇ°ÃæµÄ0 
+	while (a[bits] == 0 && bits > 0)//æ¶ˆé™¤å‰é¢çš„0 
 	{
 		bits--;
 	}
 
-	high = a[bits];//highÖ¸Ïò×î¸ßÓĞĞ§Î»
+	high = a[bits];//highæŒ‡å‘æœ€é«˜æœ‰æ•ˆä½
 	if (high == 0 && bits == 0)//0
 		return 0;
 
-	bits = bits << 5;//Ã¿Î»32¸ö¶ş½øÖÆÎ»
+	bits = bits << 5;//æ¯ä½32ä¸ªäºŒè¿›åˆ¶ä½
 	uint32_t bit32 = 0x80000000U;
 
-	while ((high &bit32) == 0)//Èç¹ûÃ»µ½ÕâÃ´¶àÎ»£¬Î»Êı²»¶Ï-1
+	while ((high &bit32) == 0)//å¦‚æœæ²¡åˆ°è¿™ä¹ˆå¤šä½ï¼Œä½æ•°ä¸æ–­-1
 	{
 		high = high << 1;
 		bits--;
@@ -943,51 +1037,51 @@ uint32_t getbits_b(BN a)
 	return bits;
 }
 
-//¿É¿¿µÄ³ı·¨,ËäÈ»²»¿ì
+//å¯é çš„é™¤æ³•,è™½ç„¶ä¸å¿«
 int mydiv_b(BN a, BN b, BN q, BN rem)
 {
 
 	/*cout << "\nin line 2179  a=qb+rem \n " << endl;
-	cout << "line 2179 aÎ»ÊıÎª " << getbits_b(a) << endl;
-	cout << "line 2179 bÎ»ÊıÎª " << getbits_b(b) << endl;*/
+	cout << "line 2179 aä½æ•°ä¸º " << getbits_b(a) << endl;
+	cout << "line 2179 bä½æ•°ä¸º " << getbits_b(b) << endl;*/
 	memset(rem, 0, sizeof(rem));
 	memset(q, 0, sizeof(q));
 	//uint32_t *rptr, *bptr,*mbptr,*mrptr;
-	BND b_t;//ÁÙÊ±´æ·Åb
+	BND b_t;//ä¸´æ—¶å­˜æ”¾b
 	BND tempq = { 0 };
-	BND tempsub = { 0 };//´æ·ÅÉÌºÍÁÙÊ±²î
-	BND q_t = { 0 };//Ã¿¸öÉÌ
+	BND tempsub = { 0 };//å­˜æ”¾å•†å’Œä¸´æ—¶å·®
+	BND q_t = { 0 };//æ¯ä¸ªå•†
 	BND r_t;
 
 	cpy_b(r_t, a);
 	cpy_b(b_t, b);
-	if (DIGITS_B(b) == 0)//Èç¹ûbÊÇ0,³ı0´íÎó
+	if (DIGITS_B(b) == 0)//å¦‚æœbæ˜¯0,é™¤0é”™è¯¯
 		return FLAG_DIVZERO;
-	else if (DIGITS_B(r_t) == 0)//Èç¹ûa=0
+	else if (DIGITS_B(r_t) == 0)//å¦‚æœa=0
 	{
 		SETZERO_B(q);
 		SETZERO_B(rem);
 		return FLAG_OK;
 	}
-	else if (cmp_b(r_t, b_t) == -1)//Èç¹ûa<b,·µ»Øa¾ÍºÃÁË
+	else if (cmp_b(r_t, b_t) == -1)//å¦‚æœa<b,è¿”å›aå°±å¥½äº†
 	{
 		cpy_b(rem, r_t);
-		SETZERO_B(q);//ÉÌÎª0
+		SETZERO_B(q);//å•†ä¸º0
 		return FLAG_OK;
 	}
-	else if (cmp_b(r_t, b_t) == 0)//Èç¹ûa=b,·µ»Ø1¾ÍºÃÁË
+	else if (cmp_b(r_t, b_t) == 0)//å¦‚æœa=b,è¿”å›1å°±å¥½äº†
 	{
-		q[0] = 1; q[1] = 1;//ÉÌÎª1
-		SETZERO_B(rem);//ÓàÊıÎª0
+		q[0] = 1; q[1] = 1;//å•†ä¸º1
+		SETZERO_B(rem);//ä½™æ•°ä¸º0
 		return FLAG_OK;
 	}
-	else if (DIGITS_B(r_t) == 0)//Èç¹ûa=0£¬·Ç³£ºÃ
+	else if (DIGITS_B(r_t) == 0)//å¦‚æœa=0ï¼Œéå¸¸å¥½
 	{
 		SETZERO_B(q);
 		SETZERO_B(rem);
 		return FLAG_OK;
 	}
-	//ÆäËüÇé¿öÏÂ
+	//å…¶å®ƒæƒ…å†µä¸‹
 	SETDIGITS_B(q_t, DIGITS_B(r_t) - DIGITS_B(b_t) + 1);
 	int abit = getbits_b(r_t);
 	int bbit = getbits_b(b);
@@ -995,20 +1089,20 @@ int mydiv_b(BN a, BN b, BN q, BN rem)
 	int shiftnum = abit - bbit;
 	//cout << "shiftnum= "<<shiftnum << endl;
 	int subtimes = abit - bbit + 1;
-	//cout << "line 2263ÒÆÎ»ÒÔÇ°  b_t  " << bn2str(b_t) << endl;
+	//cout << "line 2263ç§»ä½ä»¥å‰  b_t  " << bn2str(b_t) << endl;
 
 	for (int i = 0; i < shiftnum; i++)
 		shl_b(b_t);
-	//shift_b(b_t, shiftnum);//×óÒÆ¶ÔÆë×î¸ßÎ»,ÒÔºóÃ¿´ÎÓÒÒÆÒ»Î»,ÒÆ¶¯ÒÔºóµÄb_t
-	//cout << "line 2263ÒÆÎ»ÒÔºó  b_t  " << bn2str(b_t) << endl;
-	//cout << "line 2263  r_t Î»ÊıÎª  " << getbits_b(r_t) << endl;
-	//cout << "line 2263ÒÆÎ»ÒÔºó  b_t Î»ÊıÎª  " << getbits_b(b_t)<< endl;
-	//cout << "aµÄÎ»ÊıÊÇ:" << abit << endl;
-	//cout << "bµÄÎ»ÊıÊÇ:" << bbit << endl;
-	//cout <<"¼õ·¨´ÎÊı" <<subtimes << endl;
+	//shift_b(b_t, shiftnum);//å·¦ç§»å¯¹é½æœ€é«˜ä½,ä»¥åæ¯æ¬¡å³ç§»ä¸€ä½,ç§»åŠ¨ä»¥åçš„b_t
+	//cout << "line 2263ç§»ä½ä»¥å  b_t  " << bn2str(b_t) << endl;
+	//cout << "line 2263  r_t ä½æ•°ä¸º  " << getbits_b(r_t) << endl;
+	//cout << "line 2263ç§»ä½ä»¥å  b_t ä½æ•°ä¸º  " << getbits_b(b_t)<< endl;
+	//cout << "açš„ä½æ•°æ˜¯:" << abit << endl;
+	//cout << "bçš„ä½æ•°æ˜¯:" << bbit << endl;
+	//cout <<"å‡æ³•æ¬¡æ•°" <<subtimes << endl;
 	for (int i = 0; i < subtimes; i++) {
 		//cout << "line 2252 subtimes"<<i << endl;
-		if (cmp_b(r_t, b_t) >= 0)//±ØĞëÓĞµÈºÅ£¡£¡£¡£¡£¡
+		if (cmp_b(r_t, b_t) >= 0)//å¿…é¡»æœ‰ç­‰å·ï¼ï¼ï¼ï¼ï¼
 		{
 			//sub_b(r_t, b_t, tempsub);
 
@@ -1018,7 +1112,7 @@ int mydiv_b(BN a, BN b, BN q, BN rem)
 			//if (*(q_t) > 1)
 			shl_b(q_t);
 
-			adduint_b(q_t, 1U, tempq);//ÉÏ1
+			adduint_b(q_t, 1U, tempq);//ä¸Š1
 		/*	if (i == 1025)cout << "line 2252 here" << i << endl;*/
 			cpy_b(q_t, tempq);
 			//cout <<"1:  "<< getbits_b(q_t) << endl;
@@ -1028,7 +1122,7 @@ int mydiv_b(BN a, BN b, BN q, BN rem)
 		}
 		else
 		{
-			shl_b(q_t);//ÉÌ0
+			shl_b(q_t);//å•†0
 			//cout << "0:  "<<getbits_b(q_t) << endl;
 
 			shr_b(b_t);
@@ -1050,52 +1144,52 @@ int mydiv_b(BN a, BN b, BN q, BN rem)
 	return FLAG_OK;
 }
 
-//ÎÒ¸ù¾İKnuth·½·¨ÊµÏÖµÄ³ı·¨
+//æˆ‘æ ¹æ®Knuthæ–¹æ³•å®ç°çš„é™¤æ³•
 int div_b(BN a, BN b, BN q, BN rem)
 {
 
 	memset(rem, 0, sizeof(rem));
 	memset(q, 0, sizeof(q));
 
-	BND b_t;//ÁÙÊ±´æ·Åb
-	BND q_t = { 0 };//Ã¿¸öÉÌ
+	BND b_t;//ä¸´æ—¶å­˜æ”¾b
+	BND q_t = { 0 };//æ¯ä¸ªå•†
 	uint32_t r_t[2 + (BNMAXDGT << 1)];
 
 	uint32_t *bptr, *mbptr, *rptr, *rcir, *mrptr, *qptr;
 	uint32_t d = 0, qh = 0,qh1=0;
 	uint64_t kuo, left, right, borrow, carry;
 	uint32_t bn_1 = 0, bn_2 = 0;
-	uint32_t ri = 0, ri_1 = 0, ri_2 = 0;//Èı¸ör'£¬³ËÁËdÒÔºóµÄ
+	uint32_t ri = 0, ri_1 = 0, ri_2 = 0;//ä¸‰ä¸ªr'ï¼Œä¹˜äº†dä»¥åçš„
 	cpy_b(r_t, a);
 	cpy_b(b_t, b);
 
-	if (DIGITS_B(b) == 0)//Èç¹ûbÊÇ0,³ı0´íÎó
+	if (DIGITS_B(b) == 0)//å¦‚æœbæ˜¯0,é™¤0é”™è¯¯
 		return FLAG_DIVZERO;
-	else if (DIGITS_B(r_t) == 0)//Èç¹ûa=0
+	else if (DIGITS_B(r_t) == 0)//å¦‚æœa=0
 	{
 		SETZERO_B(q);
 		SETZERO_B(rem);
 		return FLAG_OK;
 	}
-	else if (cmp_b(r_t, b_t) == -1)//Èç¹ûa<b,·µ»Øa¾ÍºÃÁË
+	else if (cmp_b(r_t, b_t) == -1)//å¦‚æœa<b,è¿”å›aå°±å¥½äº†
 	{
 		cpy_b(rem, r_t);
-		SETZERO_B(q);//ÉÌÎª0
+		SETZERO_B(q);//å•†ä¸º0
 		return FLAG_OK;
 	}
-	else if (cmp_b(r_t, b_t) == 0)//Èç¹ûa=b,·µ»Ø1¾ÍºÃÁË
+	else if (cmp_b(r_t, b_t) == 0)//å¦‚æœa=b,è¿”å›1å°±å¥½äº†
 	{
-		q[0] = 1; q[1] = 1;//ÉÌÎª1
-		SETZERO_B(rem);//ÓàÊıÎª0
+		q[0] = 1; q[1] = 1;//å•†ä¸º1
+		SETZERO_B(rem);//ä½™æ•°ä¸º0
 		return FLAG_OK;
 	}
-	else if (DIGITS_B(r_t) == 0)//Èç¹ûa=0£¬·Ç³£ºÃ
+	else if (DIGITS_B(r_t) == 0)//å¦‚æœa=0ï¼Œéå¸¸å¥½
 	{
 		SETZERO_B(q);
 		SETZERO_B(rem);
 		return FLAG_OK;
 	}
-	//Èç¹û³ıÊıÎ»ÊıÎª1£¬Ê¹ÓÃÒÆÎ»³ı·¨£¬ºóÃæÒªÇó³ıÊı´óÓÚµÈÓÚÁ½Î»
+	//å¦‚æœé™¤æ•°ä½æ•°ä¸º1ï¼Œä½¿ç”¨ç§»ä½é™¤æ³•ï¼Œåé¢è¦æ±‚é™¤æ•°å¤§äºç­‰äºä¸¤ä½
 	if (DIGITS_B(b_t) == 1)
 	{
 		mydiv_b(r_t, b_t, q, rem);
@@ -1111,7 +1205,7 @@ int div_b(BN a, BN b, BN q, BN rem)
 		bn_1 = bn_1 << 1;
 		d++;
 	}
-	uint64_t shiftr =(int)(BITPERDIGIT - d);//×óÒÆÊ±ÅäºÏµÄÓÒÒÆ´ÎÊı
+	uint64_t shiftr =(int)(BITPERDIGIT - d);//å·¦ç§»æ—¶é…åˆçš„å³ç§»æ¬¡æ•°
 
 	if (d > 0)
 	{
@@ -1119,44 +1213,44 @@ int div_b(BN a, BN b, BN q, BN rem)
 
 		if (DIGITS_B(b_t) > 2)
 			bn_2 = (uint32_t)((uint32_t)((uint64_t)(*(mbptr - 1)) << d) + (uint32_t)((uint64_t)(*(mbptr - 2)) >> shiftr));
-		else//µÈÓÚÁ½Î»ÔòÖ±½Ó¸³Öµ
+		else//ç­‰äºä¸¤ä½åˆ™ç›´æ¥èµ‹å€¼
 		{
 			bn_2 = (uint32_t)((uint64_t)(*(mbptr - 1)) << d);
 		}
 	}
-	else//Ã»ÓĞÒÆ¶¯ÔòÔ­·â²»¶¯
+	else//æ²¡æœ‰ç§»åŠ¨åˆ™åŸå°ä¸åŠ¨
 	{
 		bn_2 = (uint32_t)(*(mbptr - 1));
 	}
 
 	mbptr = MSDPTR_B(b_t);
-	mrptr = MSDPTR_B(r_t) + 1;//Ö¸Ïò»¬¶¯´°¿Ú×î¸ßÎ»£¬ÌîÁËÒ»Î»£¬Ö®ºó¿ÉÄÜÊÇ0¿ÉÄÜ²»ÊÇ£¬ÓÉºóÃæÒÆÎ»¾ö¶¨
-	rptr = MSDPTR_B(r_t) - DIGITS_B(b_t) + 1;//Ö¸Ïò»¬¶¯´°¿Ú×îµÍÎ»
-	qptr = q + DIGITS_B(r_t) - DIGITS_B(b_t) + 1;//×î¸ß¼´½«¿ÉÄÜÎª0¿ÉÄÜ²»ÊÇ£¬ÓÉºóÃæÒÆÎ»¾ö¶¨
-	*mrptr = 0;//³õÊ¼»¯Îª0
+	mrptr = MSDPTR_B(r_t) + 1;//æŒ‡å‘æ»‘åŠ¨çª—å£æœ€é«˜ä½ï¼Œå¡«äº†ä¸€ä½ï¼Œä¹‹åå¯èƒ½æ˜¯0å¯èƒ½ä¸æ˜¯ï¼Œç”±åé¢ç§»ä½å†³å®š
+	rptr = MSDPTR_B(r_t) - DIGITS_B(b_t) + 1;//æŒ‡å‘æ»‘åŠ¨çª—å£æœ€ä½ä½
+	qptr = q + DIGITS_B(r_t) - DIGITS_B(b_t) + 1;//æœ€é«˜å³å°†å¯èƒ½ä¸º0å¯èƒ½ä¸æ˜¯ï¼Œç”±åé¢ç§»ä½å†³å®š
+	*mrptr = 0;//åˆå§‹åŒ–ä¸º0
 
 
 
-	while (rptr >= LSDPTR_B(r_t))//¿ªÊ¼×öÊÂÇé£¬ÏÂ±ê¶ÔÓ¦£¬r(m+n)¶ÔÓ¦a(m)£¬r(m+n-1)¶ÔÓ¦a(m-1)
+	while (rptr >= LSDPTR_B(r_t))//å¼€å§‹åšäº‹æƒ…ï¼Œä¸‹æ ‡å¯¹åº”ï¼Œr(m+n)å¯¹åº”a(m)ï¼Œr(m+n-1)å¯¹åº”a(m-1)
 	{
 
 		ri = (uint32_t)((uint32_t)((uint64_t)(*mrptr) << d) + (uint32_t)((uint64_t)(*(mrptr - 1)) >> shiftr));
 		ri_1 = (uint32_t)(((uint32_t)((uint64_t)(*(mrptr - 1)) << d)  + (uint32_t)((uint64_t)(*(mrptr - 2)) >> shiftr)));
 
-		if (mrptr - 3 > r_t)//²»Ö¹ÓĞ3Î»
+		if (mrptr - 3 > r_t)//ä¸æ­¢æœ‰3ä½
 		{
 			ri_2 = (uint32_t)(((uint32_t)((uint64_t)(*(mrptr - 2)) << d) + (uint32_t)((uint64_t)(*(mrptr - 3)) >> shiftr)));
 		}
-		else//Ö»ÓĞ2Î»
+		else//åªæœ‰2ä½
 		{
 			ri_2 = (uint32_t)((uint64_t)(*(mrptr - 2)) << d);
 		}
 
 
-	    //¼ÆËãq¹À¼Æ£¬kuoÊÇ64Î»µÄ£¬È¡ÕûÊı²¿·Ö
+	    //è®¡ç®—qä¼°è®¡ï¼Œkuoæ˜¯64ä½çš„ï¼Œå–æ•´æ•°éƒ¨åˆ†
 		kuo = (uint64_t)((((uint64_t)ri << BITPERDIGIT) + (uint64_t)ri_1)  / bn_1);
 
-		if (kuo < ALLONE)//Ñ¡ÔñĞ¡µÄÄÇ¸ö£¬×î´ó¹À¼ÆµÄq²»»á³¬¹ıB-1£¬²»»á³¬¹ıB½øÖÆ
+		if (kuo < ALLONE)//é€‰æ‹©å°çš„é‚£ä¸ªï¼Œæœ€å¤§ä¼°è®¡çš„qä¸ä¼šè¶…è¿‡B-1ï¼Œä¸ä¼šè¶…è¿‡Bè¿›åˆ¶
 		{
 			qh = (uint32_t)kuo;
 
@@ -1165,20 +1259,20 @@ int div_b(BN a, BN b, BN q, BN rem)
 			qh = ALLONE;
 
 		kuo = ((uint64_t)ri << BITPERDIGIT) + (uint64_t)ri_1 - (uint64_t)bn_1*(uint64_t)qh;
-		if (kuo < BASE)//Èç¹ûÀ¨ºÅÖĞµÄ¶¼±ÈB´óÁË£¬×ó±ß¿Ï¶¨b[n-2]*qĞ¡ÓÚB*B,Ğ¡ÓÚ²Å±È½Ï£¬´óÓÚ»áÒç³ö£¬Ò²±È½Ï²»ÁË
+		if (kuo < BASE)//å¦‚æœæ‹¬å·ä¸­çš„éƒ½æ¯”Bå¤§äº†ï¼Œå·¦è¾¹è‚¯å®šb[n-2]*qå°äºB*B,å°äºæ‰æ¯”è¾ƒï¼Œå¤§äºä¼šæº¢å‡ºï¼Œä¹Ÿæ¯”è¾ƒä¸äº†
 		{
 			right = (uint64_t)(kuo << BITPERDIGIT) + (uint64_t)ri_2;
 			left = (uint64_t)bn_2 *(uint64_t)qh;
-			if (left > right)//Ã»ÓĞÒç³ö£¬ĞèÒª±È½Ï
+			if (left > right)//æ²¡æœ‰æº¢å‡ºï¼Œéœ€è¦æ¯”è¾ƒ
 			{
 				qh--;
-				//ÖØ¸´ÕâÒ»¹ı³Ì
+				//é‡å¤è¿™ä¸€è¿‡ç¨‹
 				kuo = ((uint64_t)ri << BITPERDIGIT) + (uint64_t)ri_1 - (uint64_t)bn_1*(uint64_t)qh;
-				if (kuo< BASE)//Èç¹ûÀ¨ºÅÖĞµÄ¶¼±ÈB´óÁË£¬×ó±ß¿Ï¶¨b[n-2]*qĞ¡ÓÚB*B,Ğ¡ÓÚ²Å±È½Ï£¬´óÓÚ»áÒç³ö£¬Ò²±È½Ï²»ÁË
+				if (kuo< BASE)//å¦‚æœæ‹¬å·ä¸­çš„éƒ½æ¯”Bå¤§äº†ï¼Œå·¦è¾¹è‚¯å®šb[n-2]*qå°äºB*B,å°äºæ‰æ¯”è¾ƒï¼Œå¤§äºä¼šæº¢å‡ºï¼Œä¹Ÿæ¯”è¾ƒä¸äº†
 				{
 					right = (uint64_t)(kuo << BITPERDIGIT) + (uint64_t)ri_2;
 					left = (uint64_t)bn_2 *(uint64_t)qh;
-					if (left > right)//Ã»ÓĞÒç³ö£¬ĞèÒª±È½Ï
+					if (left > right)//æ²¡æœ‰æº¢å‡ºï¼Œéœ€è¦æ¯”è¾ƒ
 						qh--;
 				}
 				else
@@ -1191,38 +1285,38 @@ int div_b(BN a, BN b, BN q, BN rem)
 			}
 		}
 
-		borrow = BASE;//½èÎ»Ä¬ÈÏ
+		borrow = BASE;//å€Ÿä½é»˜è®¤
 		carry = 0;
 		int i = 0;
 		for (bptr = LSDPTR_B(b_t), rcir = rptr; bptr <= mbptr; bptr++, rcir++)
 		{
-			if (borrow>= BASE)// Ã»ÓĞ·¢Éú½èÎ»µÄÇé¿ö£¬×î¸ß´¦×ÜÊÇBASE
+			if (borrow>= BASE)// æ²¡æœ‰å‘ç”Ÿå€Ÿä½çš„æƒ…å†µï¼Œæœ€é«˜å¤„æ€»æ˜¯BASE
 			{			
 				carry = (uint64_t)qh * (uint64_t)*bptr + (uint64_t)(uint32_t)(carry >> BITPERDIGIT);
 				borrow = (uint64_t)*rcir + BASE - (uint64_t)(uint32_t)carry;
 				*rcir = (uint32_t)(borrow);
 			}
-			else//·¢ÉúÁË½èÎ»,»Ö¸´
+			else//å‘ç”Ÿäº†å€Ÿä½,æ¢å¤
 			{
 				carry = (uint64_t)qh * (uint64_t)*bptr + (uint64_t)(uint32_t)(carry >> BITPERDIGIT);
-				borrow = (uint64_t)*rcir + (uint64_t)BASE - (uint64_t)(uint32_t)carry - 1ULL;//½èÎ»ÁË
+				borrow = (uint64_t)*rcir + (uint64_t)BASE - (uint64_t)(uint32_t)carry - 1ULL;//å€Ÿä½äº†
 				*rcir = (uint32_t)(borrow);
 			}
 		}
 
-		if (borrow >= BASE) //Ã»ÓĞ·¢Éú½èÎ»µÄÇé¿ö£¬×î¸ß´¦×ÜÊÇBASE
+		if (borrow >= BASE) //æ²¡æœ‰å‘ç”Ÿå€Ÿä½çš„æƒ…å†µï¼Œæœ€é«˜å¤„æ€»æ˜¯BASE
 		{
 			borrow = (uint64_t)*rcir + BASE - (uint64_t)(uint32_t)(carry >> BITPERDIGIT);
 			*rcir = (uint32_t)(borrow);
 		}
-		else//·¢ÉúÁË½èÎ»
+		else//å‘ç”Ÿäº†å€Ÿä½
 		{
-			borrow = (uint64_t)*rcir + BASE - (uint64_t)(uint32_t)(carry >> BITPERDIGIT) - 1ULL;//½èÎ»ÁË
+			borrow = (uint64_t)*rcir + BASE - (uint64_t)(uint32_t)(carry >> BITPERDIGIT) - 1ULL;//å€Ÿä½äº†
 			*rcir = (uint32_t)(borrow);
 		}
 		*qptr = qh;
 
-		if (borrow < BASE)//borrow»¹±»½èÎ»ÁËÃ»ÓĞ»¹»ØÀ´,q´óÁËÒ»Î»£¬b¼Ó»áµ½aÖĞ£¬ºÍ¼Ó·¨¹ı³ÌÒ»Ñù
+		if (borrow < BASE)//borrowè¿˜è¢«å€Ÿä½äº†æ²¡æœ‰è¿˜å›æ¥,qå¤§äº†ä¸€ä½ï¼ŒbåŠ ä¼šåˆ°aä¸­ï¼Œå’ŒåŠ æ³•è¿‡ç¨‹ä¸€æ ·
 		{
 			carry = 0;
 			for (bptr = LSDPTR_B(b_t), rcir = rptr; bptr <= mbptr; bptr++, rcir++)
@@ -1244,38 +1338,38 @@ int div_b(BN a, BN b, BN q, BN rem)
 }
 
 
-//²úÉúbits¸ö¶ş½øÖÆÎ»µÄ´óÊıresult£¬Ã¿5¸ö32Î»¹şÏ£Ò»´Î£¬¿ìÁË²»Ö¹Ò»µã
+//äº§ç”Ÿbitsä¸ªäºŒè¿›åˆ¶ä½çš„å¤§æ•°resultï¼Œæ¯5ä¸ª32ä½å“ˆå¸Œä¸€æ¬¡ï¼Œå¿«äº†ä¸æ­¢ä¸€ç‚¹
 int genBN(BN result, int bits)
 {
 
-	if (bits < 0 || bits>BNMAXBIT)//ÎŞ·¨²úÉú¸ü´óÎ»ÊıµÄ
+	if (bits < 0 || bits>BNMAXBIT)//æ— æ³•äº§ç”Ÿæ›´å¤§ä½æ•°çš„
 		return FLAG_ERROR;
 	if (bits == 0)
 	{
 		SETZERO_B(result);
 		return FLAG_OK;
 	}
-	//ÆäËüÇé¿öÕı³£´¦Àí
+	//å…¶å®ƒæƒ…å†µæ­£å¸¸å¤„ç†
 
 	char randpath[11] = "rand.txt";
 	char digest[80];
 	char onebit[9] = { 0 };
 	int times = (bits + 31) / 32;
-	int t5 = ((times + 4) / 5) - 1;//Ò»´ÎÈ¡³ö5¸öµÄÇé¿öÓĞ¶àÉÙ´Î
-	int t5r = times % 5;//²»×ã5Î»µÄ
-	if (t5r >= 1) t5r--;//ÁôÏÂ×îºóÒ»´Î
+	int t5 = ((times + 4) / 5) - 1;//ä¸€æ¬¡å–å‡º5ä¸ªçš„æƒ…å†µæœ‰å¤šå°‘æ¬¡
+	int t5r = times % 5;//ä¸è¶³5ä½çš„
+	if (t5r >= 1) t5r--;//ç•™ä¸‹æœ€åä¸€æ¬¡
 
 	//cout << "times= "<<times << endl;
-	int remain = bits % 32;//×î¸ßÒ»Î»Ã»¶¯
+	int remain = bits % 32;//æœ€é«˜ä¸€ä½æ²¡åŠ¨
 	BN a = { 0 }, temp = { 0 };
 	SETDIGITS_B(a, times);
 	uint32_t perdig = 0;
 	int i = 0, j = 0;
-	for (; i < t5; i++)//×î¸ß32Î»ÏÈ²»¶¯
+	for (; i < t5; i++)//æœ€é«˜32ä½å…ˆä¸åŠ¨
 	{
 		writerand(randpath);
 		memset(digest, 0, sizeof(digest));
-		mysha1(randpath, digest);//ÓĞ40¸ö×Ö½Ú£¬160Î»Êı		
+		mysha1(randpath, digest);//æœ‰40ä¸ªå­—èŠ‚ï¼Œ160ä½æ•°		
 		for (j = 0; j < 5; j++)
 		{
 			memcpy(onebit, &digest[8 * j], 8);
@@ -1286,8 +1380,8 @@ int genBN(BN result, int bits)
 	j = 0;
 	writerand(randpath);
 	memset(digest, 0, sizeof(digest));
-	mysha1(randpath, digest);//ÓĞ40¸ö×Ö½Ú£¬160Î»Êı
-	for (; j < t5r; j++)//²»×ã5Î»µÄ
+	mysha1(randpath, digest);//æœ‰40ä¸ªå­—èŠ‚ï¼Œ160ä½æ•°
+	for (; j < t5r; j++)//ä¸è¶³5ä½çš„
 	{
 		memcpy(onebit, &digest[8 * j], 8);
 		perdig = stoul(onebit, NULL, 16);
@@ -1296,16 +1390,16 @@ int genBN(BN result, int bits)
 
 	int shiftright = 0;
 	uint32_t bit32 = 0x80000000U;
-	if (remain == 0)//ÊÇ32±¶Êı£¬Òª´Õ³ö32Î»£¡
+	if (remain == 0)//æ˜¯32å€æ•°ï¼Œè¦å‡‘å‡º32ä½ï¼
 	{
 		while (true)
 		{
 			writerand(randpath);
 			memset(digest, 0, sizeof(digest));
-			mysha1(randpath, digest);//ÓĞ40¸ö×Ö½Ú£¬160Î»Êı
+			mysha1(randpath, digest);//æœ‰40ä¸ªå­—èŠ‚ï¼Œ160ä½æ•°
 			memcpy(onebit, digest, 8);
 			perdig = stoul(onebit, NULL, 16);
-			if (perdig >= bit32)//Òª´Õ¹»
+			if (perdig >= bit32)//è¦å‡‘å¤Ÿ
 				break;
 		}
 	}
@@ -1313,14 +1407,14 @@ int genBN(BN result, int bits)
 	{
 		writerand(randpath);
 		memset(digest, 0, sizeof(digest));
-		mysha1(randpath, digest);//ÓĞ40¸ö×Ö½Ú£¬160Î»Êı
+		mysha1(randpath, digest);//æœ‰40ä¸ªå­—èŠ‚ï¼Œ160ä½æ•°
 		memcpy(onebit, digest, 8);
 		perdig = stoul(onebit, NULL, 16);
 
 		SETONEBIT_B(temp, perdig);
 		shiftright = getbits_b(temp) - remain;
 		//cout << "shiftright = " << shiftright << endl;
-		if (shiftright >= 0)//µÈÓÚ²»ÓÃÒÆ¶¯£¬»¹Òª×óÒÆ
+		if (shiftright >= 0)//ç­‰äºä¸ç”¨ç§»åŠ¨ï¼Œè¿˜è¦å·¦ç§»
 			perdig = perdig >> shiftright;
 		else if (shiftright < 0)
 			perdig = perdig << abs(shiftright);
@@ -1330,7 +1424,7 @@ int genBN(BN result, int bits)
 	RMLDZRS_B(result);
 	return FLAG_OK;
 }
-//°ÑËæ»úÊıĞ´µ½addrÖĞ
+//æŠŠéšæœºæ•°å†™åˆ°addrä¸­
 void writerand(char * addr)
 {
 	FILE *fp = NULL;
@@ -1411,19 +1505,19 @@ long long msgsize(char*plainaddr)
 	return size;
 }
 
-inline uint32_t cirleft(uint32_t word, int bit)//wordÑ­»·×óÒÆbitÎ»
+inline uint32_t cirleft(uint32_t word, int bit)//wordå¾ªç¯å·¦ç§»bitä½
 {
 	return(word << bit) | (word >> (32 - bit));
 }
 
 int mysha1(char *inputfileaddr, char *output)
 {
-	//char inputfileaddr[81] = "input.file";//ÊäÈë
-	//char outputfile[81] = "digest.file";//Êä³ö
-	uint32_t W[80];//ÓÃ¿Õ¼ä»»Ê±¼ä£¬W¿éÓĞ80¸ö
-	memset(W, 0, sizeof(W));//Ô­Ê¼µÄÎª0¾ÍºÃÀ²
+	//char inputfileaddr[81] = "input.file";//è¾“å…¥
+	//char outputfile[81] = "digest.file";//è¾“å‡º
+	uint32_t W[80];//ç”¨ç©ºé—´æ¢æ—¶é—´ï¼ŒWå—æœ‰80ä¸ª
+	memset(W, 0, sizeof(W));//åŸå§‹çš„ä¸º0å°±å¥½å•¦
 	uint32_t A, B, C, D, E;
-	long long msglen = msgsize(inputfileaddr) * 8;//»ñµÃÔ­ÎÄÎ»Êı£¬¶ş½øÖÆÎ»µ¥Î»£¬²»ÊÇ×Ö½Ú£¡
+	long long msglen = msgsize(inputfileaddr) * 8;//è·å¾—åŸæ–‡ä½æ•°ï¼ŒäºŒè¿›åˆ¶ä½å•ä½ï¼Œä¸æ˜¯å­—èŠ‚ï¼
 	FILE *fp = NULL;
 	if ((fp = fopen(inputfileaddr, "rb")) == NULL)
 	{
@@ -1433,30 +1527,30 @@ int mysha1(char *inputfileaddr, char *output)
 	}
 	long long counter = 1, times = 0;
 	int flag = 0;
-	int bytes;//×îºóÒ»´Îµ½µ×¶ÁÁË¶àÉÙ×Ö½Ú
-	if (msglen % 512 > 440)//´óÓÚ440µÄÒâË¼¾ÍÊÇµ½ÁË448ÄÇ¾ÍÓÃÁËW[13]£¬W[14]ºÍW[15]ÊÇ³¤¶È£¬ÄÇ¾Í·Å²»ÏÂ0x80ÁË
+	int bytes;//æœ€åä¸€æ¬¡åˆ°åº•è¯»äº†å¤šå°‘å­—èŠ‚
+	if (msglen % 512 > 440)//å¤§äº440çš„æ„æ€å°±æ˜¯åˆ°äº†448é‚£å°±ç”¨äº†W[13]ï¼ŒW[14]å’ŒW[15]æ˜¯é•¿åº¦ï¼Œé‚£å°±æ”¾ä¸ä¸‹0x80äº†
 	{
-		times = (msglen + 512 - 1) / 512;//ÏòÉÏÈ¡Õû
+		times = (msglen + 512 - 1) / 512;//å‘ä¸Šå–æ•´
 		flag = 1;
 	}
 	else if (msglen % 512 == 0)
 	{
-		times = (msglen + 512 - 1) / 512 + 1;//¶à×öÒ»´Î,ÒòÎªÔìÁËÒ»¸ö¿é£¬ºóÃæ¼ÓÁËÒ»¸ö¿é
+		times = (msglen + 512 - 1) / 512 + 1;//å¤šåšä¸€æ¬¡,å› ä¸ºé€ äº†ä¸€ä¸ªå—ï¼Œåé¢åŠ äº†ä¸€ä¸ªå—
 		flag = 2;
 	}
-	else times = (msglen + 512 - 1) / 512;//ÖÁÉÙÒª×öÄÇÃ´¶à´Î£¬¿ÉÄÜ»á¶àÒ»´Î
+	else times = (msglen + 512 - 1) / 512;//è‡³å°‘è¦åšé‚£ä¹ˆå¤šæ¬¡ï¼Œå¯èƒ½ä¼šå¤šä¸€æ¬¡
 
 	A = H0; B = H1; C = H2; D = H3; E = H4;
-	while (counter < times)//Ò»°ãÇé¿öÉÙ×ö×îºóÒ»´Î£¬ÌØÊâÇé¿öÉÙ×ö×îºóÁ½´Î
+	while (counter < times)//ä¸€èˆ¬æƒ…å†µå°‘åšæœ€åä¸€æ¬¡ï¼Œç‰¹æ®Šæƒ…å†µå°‘åšæœ€åä¸¤æ¬¡
 	{
-		fread(W, sizeof(char), 64, fp);//¶Á³öÒ»¸öÏûÏ¢¿é512bits,¶Áµ½WÀïÃæ
-		for (int i = 0; i < 16; i++)//°ÑË³Ğò×ª¹ıÀ´,µÃµ½ÏëÒªµÄ´æ´¢Ë³Ğò
+		fread(W, sizeof(char), 64, fp);//è¯»å‡ºä¸€ä¸ªæ¶ˆæ¯å—512bits,è¯»åˆ°Wé‡Œé¢
+		for (int i = 0; i < 16; i++)//æŠŠé¡ºåºè½¬è¿‡æ¥,å¾—åˆ°æƒ³è¦çš„å­˜å‚¨é¡ºåº
 		{
 			W[i] = (W[i] >> 24) + (W[i] >> 8 & 0xff00) + (W[i] << 8 & 0xff0000) + (W[i] << 24);
 		}
 		for (int i = 0; i < 20; i++)
 		{
-			if (i >= 16)//W[i]Éú³ÉÒÔºó»¹Òª×óÒÆ1Î»
+			if (i >= 16)//W[i]ç”Ÿæˆä»¥åè¿˜è¦å·¦ç§»1ä½
 				W[i] = ((W[i - 3] ^ W[i - 8] ^ W[i - 14] ^ W[i - 16]) << 1) |
 				((W[i - 3] ^ W[i - 8] ^ W[i - 14] ^ W[i - 16]) >> 31);
 			subround(A, B, C, D, E, W[i], K0, 1);
@@ -1482,7 +1576,7 @@ int mysha1(char *inputfileaddr, char *output)
 				((W[i - 3] ^ W[i - 8] ^ W[i - 14] ^ W[i - 16]) >> 31);
 			subround(A, B, C, D, E, W[i], K3, 4);
 		}
-		A = H0 = H0 + A;//¼ÓÁËÒÔºó¼ÌĞøCVi
+		A = H0 = H0 + A;//åŠ äº†ä»¥åç»§ç»­CVi
 		B = H1 = H1 + B;
 		C = H2 = H2 + C;
 		D = H3 = H3 + D;
@@ -1494,15 +1588,15 @@ int mysha1(char *inputfileaddr, char *output)
 	if (flag == 0 || flag == 1)
 	{
 
-		bytes = fread(W, sizeof(char), 64, fp);//¶Á³öÒ»¸öÏûÏ¢¿é512bits,¶Áµ½WÀïÃæ	
+		bytes = fread(W, sizeof(char), 64, fp);//è¯»å‡ºä¸€ä¸ªæ¶ˆæ¯å—512bits,è¯»åˆ°Wé‡Œé¢	
 		p = (unsigned char*)&W[0];
 		p = p + bytes;
 		*p = 0x80;
 		p = (unsigned char*)&msglen;
 		if (flag == 0)
 		{
-			memcpy(&W[14], p + 4, 4);//¸´ÖÆ³¤¶È
-			memcpy(&W[15], p, 4);//¸´ÖÆ³¤¶È£¬Òª±äÒ»ÏÂ´æ´¢Ë³Ğò
+			memcpy(&W[14], p + 4, 4);//å¤åˆ¶é•¿åº¦
+			memcpy(&W[15], p, 4);//å¤åˆ¶é•¿åº¦ï¼Œè¦å˜ä¸€ä¸‹å­˜å‚¨é¡ºåº
 			W[14] = (W[14] >> 24) + (W[14] >> 8 & 0xff00) + (W[14] << 8 & 0xff0000) + (W[14] << 24);
 			W[15] = (W[15] >> 24) + (W[15] >> 8 & 0xff00) + (W[15] << 8 & 0xff0000) + (W[15] << 24);
 		}
@@ -1513,12 +1607,12 @@ int mysha1(char *inputfileaddr, char *output)
 		p = (unsigned char*)&W[0];
 		*p = 0x80;
 		p = (unsigned char*)&msglen;
-		memcpy(&W[14], p + 4, 4);//¸´ÖÆ³¤¶È
-		memcpy(&W[15], p, 4);//¸´ÖÆ³¤¶È£¬Òª±äÒ»ÏÂ´æ´¢Ë³Ğò
+		memcpy(&W[14], p + 4, 4);//å¤åˆ¶é•¿åº¦
+		memcpy(&W[15], p, 4);//å¤åˆ¶é•¿åº¦ï¼Œè¦å˜ä¸€ä¸‹å­˜å‚¨é¡ºåº
 		W[14] = (W[14] >> 24) + (W[14] >> 8 & 0xff00) + (W[14] << 8 & 0xff0000) + (W[14] << 24);
 		W[15] = (W[15] >> 24) + (W[15] >> 8 & 0xff00) + (W[15] << 8 & 0xff0000) + (W[15] << 24);
 	}
-	for (int i = 0; i < 16; i++)//Ë³ĞòÓÀ¾Ã×ª¹ıÀ´
+	for (int i = 0; i < 16; i++)//é¡ºåºæ°¸ä¹…è½¬è¿‡æ¥
 	{
 		W[i] = (W[i] >> 24) + (W[i] >> 8 & 0xff00) + (W[i] << 8 & 0xff0000) + (W[i] << 24);
 	}
@@ -1557,8 +1651,8 @@ int mysha1(char *inputfileaddr, char *output)
 	{
 		memset(W, 0, 64);
 		p = (unsigned char*)&msglen;
-		memcpy(&W[14], p + 4, 4);//¸´ÖÆ³¤¶È
-		memcpy(&W[15], p, 4);//¸´ÖÆ³¤¶È
+		memcpy(&W[14], p + 4, 4);//å¤åˆ¶é•¿åº¦
+		memcpy(&W[15], p, 4);//å¤åˆ¶é•¿åº¦
 		//A = H0; B = H1; C = H2; D = H3; E = H4;
 		for (int i = 0; i < 20; i++)
 		{
@@ -1614,12 +1708,12 @@ int SHA1(char *inputfileaddr, char *output)
 	uint32_t H2 = 0x98BADCFE;
 	uint32_t H3 = 0x10325476;
 	uint32_t H4 = 0xC3D2E1F0;
-	//char inputfileaddr[81] = "input.file";//ÊäÈë
-	//char outputfile[81] = "digest.file";//Êä³ö
-	uint32_t W[80];//ÓÃ¿Õ¼ä»»Ê±¼ä£¬W¿éÓĞ80¸ö
-	memset(W, 0, sizeof(W));//Ô­Ê¼µÄÎª0¾ÍºÃÀ²
+	//char inputfileaddr[81] = "input.file";//è¾“å…¥
+	//char outputfile[81] = "digest.file";//è¾“å‡º
+	uint32_t W[80];//ç”¨ç©ºé—´æ¢æ—¶é—´ï¼ŒWå—æœ‰80ä¸ª
+	memset(W, 0, sizeof(W));//åŸå§‹çš„ä¸º0å°±å¥½å•¦
 	uint32_t A, B, C, D, E;
-	long long msglen = msgsize(inputfileaddr) * 8;//»ñµÃÔ­ÎÄÎ»Êı£¬¶ş½øÖÆÎ»µ¥Î»£¬²»ÊÇ×Ö½Ú£¡
+	long long msglen = msgsize(inputfileaddr) * 8;//è·å¾—åŸæ–‡ä½æ•°ï¼ŒäºŒè¿›åˆ¶ä½å•ä½ï¼Œä¸æ˜¯å­—èŠ‚ï¼
 	FILE *fp = NULL;
 	if ((fp = fopen(inputfileaddr, "rb")) == NULL)
 	{
@@ -1629,30 +1723,30 @@ int SHA1(char *inputfileaddr, char *output)
 	}
 	long long counter = 1, times = 0;
 	int flag = 0;
-	int bytes;//×îºóÒ»´Îµ½µ×¶ÁÁË¶àÉÙ×Ö½Ú
-	if (msglen % 512 > 440)//´óÓÚ440µÄÒâË¼¾ÍÊÇµ½ÁË448ÄÇ¾ÍÓÃÁËW[13]£¬W[14]ºÍW[15]ÊÇ³¤¶È£¬ÄÇ¾Í·Å²»ÏÂ0x80ÁË
+	int bytes;//æœ€åä¸€æ¬¡åˆ°åº•è¯»äº†å¤šå°‘å­—èŠ‚
+	if (msglen % 512 > 440)//å¤§äº440çš„æ„æ€å°±æ˜¯åˆ°äº†448é‚£å°±ç”¨äº†W[13]ï¼ŒW[14]å’ŒW[15]æ˜¯é•¿åº¦ï¼Œé‚£å°±æ”¾ä¸ä¸‹0x80äº†
 	{
-		times = (msglen + 512 - 1) / 512;//ÏòÉÏÈ¡Õû
+		times = (msglen + 512 - 1) / 512;//å‘ä¸Šå–æ•´
 		flag = 1;
 	}
 	else if (msglen % 512 == 0)
 	{
-		times = (msglen + 512 - 1) / 512 + 1;//¶à×öÒ»´Î,ÒòÎªÔìÁËÒ»¸ö¿é£¬ºóÃæ¼ÓÁËÒ»¸ö¿é
+		times = (msglen + 512 - 1) / 512 + 1;//å¤šåšä¸€æ¬¡,å› ä¸ºé€ äº†ä¸€ä¸ªå—ï¼Œåé¢åŠ äº†ä¸€ä¸ªå—
 		flag = 2;
 	}
-	else times = (msglen + 512 - 1) / 512;//ÖÁÉÙÒª×öÄÇÃ´¶à´Î£¬¿ÉÄÜ»á¶àÒ»´Î
+	else times = (msglen + 512 - 1) / 512;//è‡³å°‘è¦åšé‚£ä¹ˆå¤šæ¬¡ï¼Œå¯èƒ½ä¼šå¤šä¸€æ¬¡
 
 	A = H0; B = H1; C = H2; D = H3; E = H4;
-	while (counter < times)//Ò»°ãÇé¿öÉÙ×ö×îºóÒ»´Î£¬ÌØÊâÇé¿öÉÙ×ö×îºóÁ½´Î
+	while (counter < times)//ä¸€èˆ¬æƒ…å†µå°‘åšæœ€åä¸€æ¬¡ï¼Œç‰¹æ®Šæƒ…å†µå°‘åšæœ€åä¸¤æ¬¡
 	{
-		fread(W, sizeof(char), 64, fp);//¶Á³öÒ»¸öÏûÏ¢¿é512bits,¶Áµ½WÀïÃæ
-		for (int i = 0; i < 16; i++)//°ÑË³Ğò×ª¹ıÀ´,µÃµ½ÏëÒªµÄ´æ´¢Ë³Ğò
+		fread(W, sizeof(char), 64, fp);//è¯»å‡ºä¸€ä¸ªæ¶ˆæ¯å—512bits,è¯»åˆ°Wé‡Œé¢
+		for (int i = 0; i < 16; i++)//æŠŠé¡ºåºè½¬è¿‡æ¥,å¾—åˆ°æƒ³è¦çš„å­˜å‚¨é¡ºåº
 		{
 			W[i] = (W[i] >> 24) + (W[i] >> 8 & 0xff00) + (W[i] << 8 & 0xff0000) + (W[i] << 24);
 		}
 		for (int i = 0; i < 20; i++)
 		{
-			if (i >= 16)//W[i]Éú³ÉÒÔºó»¹Òª×óÒÆ1Î»
+			if (i >= 16)//W[i]ç”Ÿæˆä»¥åè¿˜è¦å·¦ç§»1ä½
 				W[i] = ((W[i - 3] ^ W[i - 8] ^ W[i - 14] ^ W[i - 16]) << 1) |
 				((W[i - 3] ^ W[i - 8] ^ W[i - 14] ^ W[i - 16]) >> 31);
 			subround(A, B, C, D, E, W[i], K0, 1);
@@ -1678,7 +1772,7 @@ int SHA1(char *inputfileaddr, char *output)
 				((W[i - 3] ^ W[i - 8] ^ W[i - 14] ^ W[i - 16]) >> 31);
 			subround(A, B, C, D, E, W[i], K3, 4);
 		}
-		A = H0 = H0 + A;//¼ÓÁËÒÔºó¼ÌĞøCVi
+		A = H0 = H0 + A;//åŠ äº†ä»¥åç»§ç»­CVi
 		B = H1 = H1 + B;
 		C = H2 = H2 + C;
 		D = H3 = H3 + D;
@@ -1690,15 +1784,15 @@ int SHA1(char *inputfileaddr, char *output)
 	if (flag == 0 || flag == 1)
 	{
 
-		bytes = fread(W, sizeof(char), 64, fp);//¶Á³öÒ»¸öÏûÏ¢¿é512bits,¶Áµ½WÀïÃæ	
+		bytes = fread(W, sizeof(char), 64, fp);//è¯»å‡ºä¸€ä¸ªæ¶ˆæ¯å—512bits,è¯»åˆ°Wé‡Œé¢	
 		p = (unsigned char*)&W[0];
 		p = p + bytes;
 		*p = 0x80;
 		p = (unsigned char*)&msglen;
 		if (flag == 0)
 		{
-			memcpy(&W[14], p + 4, 4);//¸´ÖÆ³¤¶È
-			memcpy(&W[15], p, 4);//¸´ÖÆ³¤¶È£¬Òª±äÒ»ÏÂ´æ´¢Ë³Ğò
+			memcpy(&W[14], p + 4, 4);//å¤åˆ¶é•¿åº¦
+			memcpy(&W[15], p, 4);//å¤åˆ¶é•¿åº¦ï¼Œè¦å˜ä¸€ä¸‹å­˜å‚¨é¡ºåº
 			W[14] = (W[14] >> 24) + (W[14] >> 8 & 0xff00) + (W[14] << 8 & 0xff0000) + (W[14] << 24);
 			W[15] = (W[15] >> 24) + (W[15] >> 8 & 0xff00) + (W[15] << 8 & 0xff0000) + (W[15] << 24);
 		}
@@ -1709,12 +1803,12 @@ int SHA1(char *inputfileaddr, char *output)
 		p = (unsigned char*)&W[0];
 		*p = 0x80;
 		p = (unsigned char*)&msglen;
-		memcpy(&W[14], p + 4, 4);//¸´ÖÆ³¤¶È
-		memcpy(&W[15], p, 4);//¸´ÖÆ³¤¶È£¬Òª±äÒ»ÏÂ´æ´¢Ë³Ğò
+		memcpy(&W[14], p + 4, 4);//å¤åˆ¶é•¿åº¦
+		memcpy(&W[15], p, 4);//å¤åˆ¶é•¿åº¦ï¼Œè¦å˜ä¸€ä¸‹å­˜å‚¨é¡ºåº
 		W[14] = (W[14] >> 24) + (W[14] >> 8 & 0xff00) + (W[14] << 8 & 0xff0000) + (W[14] << 24);
 		W[15] = (W[15] >> 24) + (W[15] >> 8 & 0xff00) + (W[15] << 8 & 0xff0000) + (W[15] << 24);
 	}
-	for (int i = 0; i < 16; i++)//Ë³ĞòÓÀ¾Ã×ª¹ıÀ´
+	for (int i = 0; i < 16; i++)//é¡ºåºæ°¸ä¹…è½¬è¿‡æ¥
 	{
 		W[i] = (W[i] >> 24) + (W[i] >> 8 & 0xff00) + (W[i] << 8 & 0xff0000) + (W[i] << 24);
 	}
@@ -1753,8 +1847,8 @@ int SHA1(char *inputfileaddr, char *output)
 	{
 		memset(W, 0, 64);
 		p = (unsigned char*)&msglen;
-		memcpy(&W[14], p + 4, 4);//¸´ÖÆ³¤¶È
-		memcpy(&W[15], p, 4);//¸´ÖÆ³¤¶È
+		memcpy(&W[14], p + 4, 4);//å¤åˆ¶é•¿åº¦
+		memcpy(&W[15], p, 4);//å¤åˆ¶é•¿åº¦
 		//A = H0; B = H1; C = H2; D = H3; E = H4;
 		for (int i = 0; i < 20; i++)
 		{
@@ -1803,7 +1897,7 @@ int SHA1(char *inputfileaddr, char *output)
 	return 0;
 }
 
-int findprime(BN a, int bits)//Ñ°ÕÒÒ»¸öbitsÎ»µÄËØÊı
+int findprime(BN a, int bits)//å¯»æ‰¾ä¸€ä¸ªbitsä½çš„ç´ æ•°
 {
 	unsigned int prime[50] =
 	{
@@ -1812,12 +1906,12 @@ int findprime(BN a, int bits)//Ñ°ÕÒÒ»¸öbitsÎ»µÄËØÊı
 	};
 	BN temp1 = { 1,1 }, temp3;
 	int judge[30] = { 0 };
-	SETONEBIT_B(temp3, prime[34]);//×î´ó¿¼ÂÇ·¶Î§£¬¶ÔÓÚ524±ÈÌØ£¬34±È½ÏºÃ£¨Ò²¾ÍÊÇµÚ35¸ö£©
+	SETONEBIT_B(temp3, prime[34]);//æœ€å¤§è€ƒè™‘èŒƒå›´ï¼Œå¯¹äº524æ¯”ç‰¹ï¼Œ34æ¯”è¾ƒå¥½ï¼ˆä¹Ÿå°±æ˜¯ç¬¬35ä¸ªï¼‰
 
 	BN bignum, fac, gcd, linshi, adjnum, linshi1;
 	SETONEBIT_B(linshi, 2U);
 	int fermatresult = 0;
-	readbn(fac, "35primefac.txt");//Ç°35¸öËØÊıµÄ³Ë»ı£¬¶ÔÓÚ524±ÈÌØ±È½ÏºÃ
+	readbn(fac, "35primefac.txt");//å‰35ä¸ªç´ æ•°çš„ä¹˜ç§¯ï¼Œå¯¹äº524æ¯”ç‰¹æ¯”è¾ƒå¥½
 	int times = 0;
 
 	//redo:
@@ -1835,23 +1929,23 @@ int findprime(BN a, int bits)//Ñ°ÕÒÒ»¸öbitsÎ»µÄËØÊı
 		//cout << "redo a bignum" << endl;
 		//cout << "bignum= " << bn2str(bignum) << endl;
 		//cout << "gcd= " << bn2str(gcd) << endl;
-		if (cmp_b(gcd, ONE_BN) == 0)//Èç¹ûÉ¸Ñ¡ÎªËØÊı,·ÑÂí¼ì²â
+		if (cmp_b(gcd, ONE_BN) == 0)//å¦‚æœç­›é€‰ä¸ºç´ æ•°,è´¹é©¬æ£€æµ‹
 		{
 			//cout << "bignum= " << bn2str(bignum) << endl;
-			//cout << "Ã»ÓĞµ÷Õû£¬Ö±½Ó·ÑÂí" << endl;
+			//cout << "æ²¡æœ‰è°ƒæ•´ï¼Œç›´æ¥è´¹é©¬" << endl;
 			fermatresult = fermat_b(bignum);
 			times++;
-			//cout << "·ÑÂí½á¹ûÎª  " << fermatresult << endl<<endl;//Îª1¾ÍÕıÈ·ÁË
+			//cout << "è´¹é©¬ç»“æœä¸º  " << fermatresult << endl<<endl;//ä¸º1å°±æ­£ç¡®äº†
 			cpy_b(a, bignum);
 			SETONEBIT_B(linshi, 2U);
 		}
-		else if (cmp_b(gcd, temp3) > 0 || cmp_b(gcd, TWO_BN) == 0)//ÖØĞÂÀ´Ò»¸ö
+		else if (cmp_b(gcd, temp3) > 0 || cmp_b(gcd, TWO_BN) == 0)//é‡æ–°æ¥ä¸€ä¸ª
 		{
 		}
-		else if (cmp_b(gcd, TWO_BN) != 0)//µ÷Õû,Ç°Ìá²»ÊÇÅ¼Êı²Åµ÷Õû
+		else if (cmp_b(gcd, TWO_BN) != 0)//è°ƒæ•´,å‰æä¸æ˜¯å¶æ•°æ‰è°ƒæ•´
 		{
 			SETONEBIT_B(linshi, 2U);
-			for (int i = 0; i < 30; i++)//¶ÔÓÚ524±ÈÌØ£¬30±È½ÏºÃ
+			for (int i = 0; i < 30; i++)//å¯¹äº524æ¯”ç‰¹ï¼Œ30æ¯”è¾ƒå¥½
 			{
 				add_b(bignum, linshi, adjnum);
 				//cpy_b(bignum, adjnum);
@@ -1861,11 +1955,11 @@ int findprime(BN a, int bits)//Ñ°ÕÒÒ»¸öbitsÎ»µÄËØÊı
 					fermatresult = fermat_b(adjnum);
 					times++;
 					fermatresult = fermat_b(adjnum);
-					//cout << " ÒÑ¾­µ÷ÕûÁËµÄ´óÊıÊÇ  " << bn2str(adjnum) << endl;//Îª1¾ÍÕıÈ·ÁË
-					//cout << "µ÷ÕûÒÔºó·ÑÂí½á¹ûÎª  " << fermatresult << endl;//Îª1¾ÍÕıÈ·ÁË
+					//cout << " å·²ç»è°ƒæ•´äº†çš„å¤§æ•°æ˜¯  " << bn2str(adjnum) << endl;//ä¸º1å°±æ­£ç¡®äº†
+					//cout << "è°ƒæ•´ä»¥åè´¹é©¬ç»“æœä¸º  " << fermatresult << endl;//ä¸º1å°±æ­£ç¡®äº†
 					cpy_b(a, adjnum);
 					//SETONEBIT_B(linshi, 2U);
-					break;//ÖØĞÂÀ´£¬»òÕßÕıÈ·
+					break;//é‡æ–°æ¥ï¼Œæˆ–è€…æ­£ç¡®
 				}
 				else if (cmp_b(gcd, temp3) > 0)
 				{
@@ -1879,7 +1973,7 @@ int findprime(BN a, int bits)//Ñ°ÕÒÒ»¸öbitsÎ»µÄËØÊı
 			}
 		}
 	}
-	cout << "·ÑÂí¼ì²â×öÁË " << times << " ´Î" << endl;
+	cout << "è´¹é©¬æ£€æµ‹åšäº† " << times << " æ¬¡" << endl;
 	/*if (getbits_b(bignum) != bits)
 		goto redo;*/
 	RMLDZRS_B(a);
@@ -1927,11 +2021,11 @@ int main()
 {
 	BN p, q, n, eula, e, d;
 	BN p_1, q_1;
-	BN plain;//Ã÷ÎÄ
-	BN cry;//¼ÓÃÜÒÔºó
-	BN dec;//½âÃÜÒÔºó
+	BN plain;//æ˜æ–‡
+	BN cry;//åŠ å¯†ä»¥å
+	BN dec;//è§£å¯†ä»¥å
 
-	BN temp1 = { 0 }, temp2 = { 0 }, temp3 = { 0 };//ÓÃÀ´²âÊÔ
+	BN temp1 = { 0 }, temp2 = { 0 }, temp3 = { 0 };//ç”¨æ¥æµ‹è¯•
 
 	memset(p, 0, BNSIZE);
 	memset(q, 0, BNSIZE);
@@ -1967,13 +2061,35 @@ int main()
 	{
 		char pstr[128] = "12345678123456789";
 		char qstr[128] = "9876543212345678";
-		str2bn(n, pstr);
-		str2bn(eula, qstr);
-		cout << "³ı·¨" << endl;
-		readbn(p, "myp4.txt");
-		readbn(q, "myq4.txt");
-		readbn(plain, "plain.txt");
-		readbn(e, "e.txt");
+		//str2bn(n, pstr);
+		//str2bn(eula, qstr);
+		//cout << "é™¤æ³•" << endl;
+		
+		BN a, n,result;
+		readbn(a, "myp4.txt");
+		readbn(n, "myq4.txt");
+		//str2bn(n, pstr);
+		//str2bn(a,qstr);
+		cout << "æ±‚açš„é€†ï¼š" << endl;
+		cout << "aæ˜¯ " << bn2str(a) << endl;
+		cout << "æ¨¡æ•°næ˜¯ " << bn2str(n) << endl;
+		elapsed = 0;
+		QueryPerformanceCounter(&start);
+		inv_b(a, n, result);
+		QueryPerformanceCounter(&finish);
+		elapsed += (finish.QuadPart - start.QuadPart) / quadpart;
+		printf("\næ¬§å‡ é‡Œå¾—é™¤æ³•æ±‚é€†èŠ±è´¹ %f ms \n\n", elapsed * 1000);
+		cout << "æ­£ç¡®é€†å…ƒæ˜¯ " << bn2str(result) << endl;
+		elapsed = 0;
+		QueryPerformanceCounter(&start);
+		new_inv(a, n, result);
+		QueryPerformanceCounter(&finish);
+		elapsed += (finish.QuadPart - start.QuadPart) / quadpart;
+		printf("\nå¦ä¸€ç§æ–¹æ³•æ±‚é€†èŠ±è´¹ %f ms \n\n",  elapsed * 1000);
+		
+		cout << "å¦ä¸€ç§æ–¹æ³•é€†å…ƒæ˜¯ " << bn2str(result) << endl;
+		//readbn(plain, "plain.txt");
+		//readbn(e, "e.txt");
 		//uint64_t a = 1UL;
 		//printf("%llX\n", a);
 		//printf("%llX\n", a<<28);
@@ -1990,11 +2106,11 @@ int main()
 		//memset(p, 0, sizeof(p));
 		//mul(d, d, p);
 
-		div_b(p, n, d, eula);
-		cout << "±»³ıÊı  is " << bn2str(p) << endl;
-		cout << "³ıÊı  is " << bn2str(n) << endl;
-		cout << "quo is " << bn2str(d) << endl;
-		cout << "remain is " << bn2str(eula) << endl;
+		//div_b(p, n, d, eula);
+		//cout << "è¢«é™¤æ•°  is " << bn2str(p) << endl;
+		//cout << "é™¤æ•°  is " << bn2str(n) << endl;
+		//cout << "quo is " << bn2str(d) << endl;
+		//cout << "remain is " << bn2str(eula) << endl;
 		//unsigned char a = 0x1;
 		//unsigned char b = 0x3;
 		//unsigned char c = a - b;
@@ -2002,7 +2118,7 @@ int main()
 		system("pause");
 		return 0;
 	}
-	//²úÉúpºÍq£¬Ò»°ãÇé¿öÏÂÊÇÓĞÁËµÄ²»ÓÃ×Ô¼º²úÉú
+	//äº§ç”Ÿpå’Œqï¼Œä¸€èˆ¬æƒ…å†µä¸‹æ˜¯æœ‰äº†çš„ä¸ç”¨è‡ªå·±äº§ç”Ÿ
 	char p_path[81] = "myp4.txt";
 	char q_path[81] = "myq4.txt";
 	char e_path[81] = "e.txt";
@@ -2011,17 +2127,17 @@ int main()
 	char decry_path[81] = "decry.txt";
 
 
-	int ifgen = 0;//ÊÇ·ñ²úÉúË½Ô¿
+	int ifgen = 0;//æ˜¯å¦äº§ç”Ÿç§é’¥
 	int ifset = 0;
-	cout << "ÊÇ·ñÒª²úÉúË½Ô¿p q? ÊäÈë1²úÉú£¬ÊäÈë0²»²úÉú\n";
+	cout << "æ˜¯å¦è¦äº§ç”Ÿç§é’¥p q? è¾“å…¥1äº§ç”Ÿï¼Œè¾“å…¥0ä¸äº§ç”Ÿ\n";
 	cin >> ifgen;
-	cout << "ÊÇ·ñÒª¸Ä±äÄ¬ÈÏÎÄ¼şÂ·¾¶? ÊäÈë1¸Ä±ä£¬ÊäÈë0²»¸Ä±ä\n";
-	cout << "p ´æ·ÅÔÚ" << p_path << endl;
-	cout << "q ´æ·ÅÔÚ" << q_path << endl;
-	cout << "¹«Ô¿e´æ·ÅÔÚ" << e_path << endl;
-	cout << "Ã÷ÎÄ´æ·ÅÔÚ" << plain_path << endl;
-	cout << "ÃÜÎÄ´æ·ÅÔÚ" << cipher_path << endl;
-	cout << "½âÃÜÎÄ¼ş´æ·ÅÔÚ" << decry_path << endl;
+	cout << "æ˜¯å¦è¦æ”¹å˜é»˜è®¤æ–‡ä»¶è·¯å¾„? è¾“å…¥1æ”¹å˜ï¼Œè¾“å…¥0ä¸æ”¹å˜\n";
+	cout << "p å­˜æ”¾åœ¨" << p_path << endl;
+	cout << "q å­˜æ”¾åœ¨" << q_path << endl;
+	cout << "å…¬é’¥eå­˜æ”¾åœ¨" << e_path << endl;
+	cout << "æ˜æ–‡å­˜æ”¾åœ¨" << plain_path << endl;
+	cout << "å¯†æ–‡å­˜æ”¾åœ¨" << cipher_path << endl;
+	cout << "è§£å¯†æ–‡ä»¶å­˜æ”¾åœ¨" << decry_path << endl;
 	cin >> ifset;
 
 	if (ifset == 1)
@@ -2032,32 +2148,32 @@ int main()
 		memset(plain_path, 0, sizeof(plain_path));
 		memset(cipher_path, 0, sizeof(cipher_path));
 		memset(decry_path, 0, sizeof(decry_path));
-		cout << "ÇëÊäÈëp´æ·ÅÂ·¾¶" << endl;
+		cout << "è¯·è¾“å…¥på­˜æ”¾è·¯å¾„" << endl;
 		cin >> p_path;
-		cout << "ÇëÊäÈëq´æ·ÅÂ·¾¶" << endl;
+		cout << "è¯·è¾“å…¥qå­˜æ”¾è·¯å¾„" << endl;
 		cin >> q_path;
-		cout << "ÇëÊäÈëe´æ·ÅÂ·¾¶" << endl;
+		cout << "è¯·è¾“å…¥eå­˜æ”¾è·¯å¾„" << endl;
 		cin >> e_path;
-		cout << "ÇëÊäÈëÃ÷ÎÄ´æ·ÅÂ·¾¶" << endl;
+		cout << "è¯·è¾“å…¥æ˜æ–‡å­˜æ”¾è·¯å¾„" << endl;
 		cin >> plain_path;
-		cout << "ÇëÊäÈëÃÜÎÄ´æ·ÅÂ·¾¶" << endl;
+		cout << "è¯·è¾“å…¥å¯†æ–‡å­˜æ”¾è·¯å¾„" << endl;
 		cin >> cipher_path;
-		cout << "ÇëÊäÈë½âÃÜºó´æ·ÅÂ·¾¶" << endl;
+		cout << "è¯·è¾“å…¥è§£å¯†åå­˜æ”¾è·¯å¾„" << endl;
 		cin >> decry_path;
 
 
-		cout << "ÉèÖÃÒÔºó: " << endl << endl;
+		cout << "è®¾ç½®ä»¥å: " << endl << endl;
 
-		cout << "p ´æ·ÅÔÚ" << p_path << endl;
-		cout << "q ´æ·ÅÔÚ" << q_path << endl;
-		cout << "e ´æ·ÅÔÚ" << e_path << endl;
-		cout << "Ã÷ÎÄ´æ·ÅÔÚ" << plain_path << endl;
-		cout << "ÃÜÎÄ´æ·ÅÔÚ" << cipher_path << endl;
-		cout << "½âÃÜÎÄ¼ş´æ·ÅÔÚ" << decry_path << endl;
+		cout << "p å­˜æ”¾åœ¨" << p_path << endl;
+		cout << "q å­˜æ”¾åœ¨" << q_path << endl;
+		cout << "e å­˜æ”¾åœ¨" << e_path << endl;
+		cout << "æ˜æ–‡å­˜æ”¾åœ¨" << plain_path << endl;
+		cout << "å¯†æ–‡å­˜æ”¾åœ¨" << cipher_path << endl;
+		cout << "è§£å¯†æ–‡ä»¶å­˜æ”¾åœ¨" << decry_path << endl;
 
 	}
 
-	if (ifgen == 1)//Îª1Ôò²úÉú
+	if (ifgen == 1)//ä¸º1åˆ™äº§ç”Ÿ
 	{
 		exclu();
 		genpq(p_path, q_path);
@@ -2074,14 +2190,14 @@ int main()
 		readbn(e, e_path);
 		cout << "p is  " << bn2str(p) << endl;
 		cout << "q is  " << bn2str(q) << endl;
-		cout << "³õÊ¼e is  " << bn2str(e) << endl;
+		cout << "åˆå§‹e is  " << bn2str(e) << endl;
 	}
 
 
-	//»ñÈ¡p/q
+	//è·å–p/q
 
 
-	//¼ÆËãn
+	//è®¡ç®—n
 	mul(p, q, n);
 	cout << "n is  " << bn2str(n) << endl;
 	writebn("n.txt", eula);
@@ -2093,45 +2209,45 @@ int main()
 	cout << "q-1 is  " << bn2str(q_1) << endl;
 
 	mul(p_1, q_1, eula);
-	cout << "¦Õ(n) is  " << bn2str(eula) << endl;
+	cout << "Ï†(n) is  " << bn2str(eula) << endl;
 	writebn("fn.txt", eula);
 
-	//Ò»°ã¹«Ô¿e =65537
+	//ä¸€èˆ¬å…¬é’¥e =65537
 
 	gcd_b(e, eula, temp3);
 	if (cmp_b(temp3, ONE_BN) != 0) {
-		while (cmp_b(temp3, ONE_BN) != 0)//Èç¹û²»»¥ËØ£¡£¡£¡±¯¾çÁË
+		while (cmp_b(temp3, ONE_BN) != 0)//å¦‚æœä¸äº’ç´ ï¼ï¼ï¼æ‚²å‰§äº†
 		{
 			findprime(e, 17);
 			gcd_b(e, eula, temp3);
 		}
-		cout << "Ö®Ç°¹«Ô¿eÓë¦Õ(n)²»»¥ËØ£¬ĞŞ¸ÄÒÔºóµÄe is  " << bn2str(e) << endl;
+		cout << "ä¹‹å‰å…¬é’¥eä¸Ï†(n)ä¸äº’ç´ ï¼Œä¿®æ”¹ä»¥åçš„e is  " << bn2str(e) << endl;
 		writebn("e.txt", e);
 	}
 
 
 
-	//Ë½Ô¿d  ed =1 mod ¦Õ(n)
+	//ç§é’¥d  ed =1 mod Ï†(n)
 	inv_b(e, eula, d);
 	cout << "d is  " << bn2str(d) << endl;
 	writebn("d.txt", d);
-	//»ñÈ¡Ã÷ÎÄ
+	//è·å–æ˜æ–‡
 	readbn(plain, plain_path);
-	cout << "Ã÷ÎÄÊÇ is  " << bn2str(plain) << endl;
-	//¼ÓÃÜ
+	cout << "æ˜æ–‡æ˜¯ is  " << bn2str(plain) << endl;
+	//åŠ å¯†
 	int time1 = clock();
 	modexp_b(plain, e, n, cry);
-	printf("¼ÓÃÜºÄÊ±%d ms\n", clock() - time1);
-	cout << "ÃÜÎÄÊÇ is  " << bn2str(cry) << endl;
+	printf("åŠ å¯†è€—æ—¶%d ms\n", clock() - time1);
+	cout << "å¯†æ–‡æ˜¯ is  " << bn2str(cry) << endl;
 
 	writebn(cipher_path, cry);
 
-	//½âÃÜ
+	//è§£å¯†
 	int time2 = clock();
 	//modexp_b(cry, d, n, dec);
 	crt_b(cry, d, p, q, dec);
-	printf("\n½âÃÜÃÜºÄÊ±%d ms\n", clock() - time2);
-	cout << "½âÃÜÎª is  " << bn2str(dec) << endl;
+	printf("\nè§£å¯†å¯†è€—æ—¶%d ms\n", clock() - time2);
+	cout << "è§£å¯†ä¸º is  " << bn2str(dec) << endl;
 	writebn(decry_path, dec);
 
 
@@ -2139,13 +2255,13 @@ int main()
 	readbn(temp1, plain_path);
 	readbn(temp2, decry_path);
 
-	cout << endl << "Ã÷ÎÄÎª" << bn2str(temp1);
-	cout << endl << "½âÃÜÎª" << bn2str(temp2) << endl;
+	cout << endl << "æ˜æ–‡ä¸º" << bn2str(temp1);
+	cout << endl << "è§£å¯†ä¸º" << bn2str(temp2) << endl;
 
 	if (checkresult(plain_path, decry_path) == 1)
-		cout << "\n¼Ó½âÃÜÕıÈ·£¡" << endl;
+		cout << "\nåŠ è§£å¯†æ­£ç¡®ï¼" << endl;
 	else
-		cout << "\n¼Ó½âÃÜ³öÏÖ´íÎó£¡" << endl;
+		cout << "\nåŠ è§£å¯†å‡ºç°é”™è¯¯ï¼" << endl;
 	system("pause");
 	return 0;
 }
