@@ -27,3 +27,13 @@ may cause some problem because of it contains Chinese charactars. If so, try to 
 因为有中文，会有编码问题，可能需要用notepad++转为UTF-8或者ANSI中的某一种
 -
 
+P.S. 3
+实现说明
+-
+1. [总体说明](https://blog.csdn.net/qq_37734256/article/details/84898117)
+2. [RSA说明](https://blog.csdn.net/qq_37734256/article/details/84900062)
+3. [除法实现](https://blog.csdn.net/qq_37734256/article/details/86751853)
+4. [快速求逆](https://blog.csdn.net/qq_37734256/article/details/86776219)
+5. [蒙哥马利模幂](https://blog.csdn.net/qq_37734256/article/details/86986291)
+6. [素性检验](https://blog.csdn.net/qq_37734256/article/details/87597591)
+
