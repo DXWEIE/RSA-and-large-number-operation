@@ -15,9 +15,9 @@
 C4996	'std::basic_string<char,std::char_traits<char>,std::allocator<char>>::copy': Call to 'std::basic_string::copy' with parameters that may be unsafe - this call relies on the caller to check that the passed values are correct. To disable this warning, use -D_SCL_SECURE_NO_WARNINGS. See documentation on how to use Visual C++ 'Checked Iterators'	2018tst	d:\密码学\my特别快的rsa and bn\rsa2.cpp	465
   
 P.S. 1
-rsa2.cpp use the way Knuth provided in his book to implement division. Hence the efficiency enhance rapidly.
+rsa3.cpp use the way Knuth provided in his book to implement division. Hence the efficiency enhance rapidly.
 -
-rsa2.cpp使用了Knuth方法实现了除法，效率大幅提高。
+rsa3.cpp使用了Knuth方法实现了除法，效率大幅提高,随机数用最简单的办法产生，素性检测使用米勒拉宾。
 -
 
 
